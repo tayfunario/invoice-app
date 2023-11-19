@@ -28,7 +28,6 @@ function Top() {
   useEffect(() => {
     document.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
-      const ulButtons = document.querySelectorAll(".ul-btn");
       const toggleControl = document.getElementById("toggle-control");
 
       if (target !== toggleControl && !target.classList.contains("ul-btn")) {
@@ -61,7 +60,7 @@ function Top() {
             animate={open ? "open" : "closed"}
           >
             <li>
-              <button className="ul-btn w-full px-1 text-start rounded-md bg-yellow-100 hover:bg-yellow-200 text-yellow-700">
+              <button className="ul-btn w-full px-1 text-start rounded-md bg-orange-100 hover:bg-orange-200 text-orange-700">
                 Pending
               </button>
             </li>
