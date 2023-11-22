@@ -1,8 +1,10 @@
 import { useState } from "react";
-import Header from "../components/Header";
 import Invoice from "../components/Invoice";
 import Top from "../components/Top";
+import Blank from "../components/Blank";
+import { useLocalStorage } from "../components/useSessionStorage";
 import { data } from "../data.js";
+import Layout from "../components/Layout";
 
 export interface InvoiceProps {
   id: string;
@@ -36,21 +38,27 @@ export interface InvoiceProps {
 
 export default function Home() {
   const [invoices, setInvoices] = useState<InvoiceProps[]>(data);
+  const { setItem } = useLocalStorage("value");
 
   return (
-    <div className="min-h-screen bg-lightBG">
-      <Header />
-      <main>
-        <Top />
+    <Layout>
+      <Top invNum={invoices.length} />
 
+      <main>
         <section>
-          <ul className="pt-4 pb-10">
-            {invoices.map((invoice) => (
-              <Invoice key={invoice.id} invoice={invoice} />
-            ))}
-          </ul>
+          {invoices.length ? (
+            <ul className="pt-4 pb-10">
+              {invoices.map((invoice) => (
+                <li key={invoice.id}>
+                  <Invoice invoice={invoice} setItem={setItem} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <Blank />
+          )}
         </section>
       </main>
-    </div>
+    </Layout>
   );
 }

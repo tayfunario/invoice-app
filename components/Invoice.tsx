@@ -1,10 +1,12 @@
+import Link from "next/link";
 import { InvoiceProps } from "../pages";
 
 interface InvoiceObjProps {
   invoice: InvoiceProps;
+  setItem: (value: InvoiceProps) => void;
 }
 
-function Invoice({ invoice }: InvoiceObjProps) {
+function Invoice({ invoice, setItem }: InvoiceObjProps) {
   const formattedDate = new Date(invoice.paymentDue).toLocaleDateString(
     "en-GB",
     {
@@ -22,7 +24,11 @@ function Invoice({ invoice }: InvoiceObjProps) {
   };
 
   return (
-    <li className="mx-auto my-4 flex flex-col justify-between w-80 h-36 py-6 px-5 bg-white rounded-md">
+    <Link
+      href={"/invoice/" + invoice.id}
+      onClick={() => setItem(invoice)}
+      className="mx-auto my-4 flex flex-col justify-between w-80 h-36 py-6 px-5 bg-white rounded-md"
+    >
       <div className="flex justify-between">
         <span>
           #<span className="font-bold">{invoice.id}</span>
@@ -35,12 +41,14 @@ function Invoice({ invoice }: InvoiceObjProps) {
           <span className="font-bold">£ {invoice.total}</span>
         </div>
         <div
-          className={`grid place-content-center w-24 h-10 font-semibold capitalize ${colors[invoice.status]} rounded-md`}
+          className={`flex justify-center items-center w-24 h-10 gap-x-1 font-semibold capitalize ${
+            colors[invoice.status]
+          } rounded-md`}
         >
-          •{invoice.status}
+          <span className="text-xl">•</span> {invoice.status}
         </div>
       </div>
-    </li>
+    </Link>
   );
 }
 
