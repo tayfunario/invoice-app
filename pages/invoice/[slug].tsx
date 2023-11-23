@@ -3,8 +3,9 @@ import { useLocalStorage } from "../../components/useSessionStorage";
 import Layout from "../../components/Layout";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { InvoiceProps } from "..";
+import { InvoiceProps } from "../index";
 import Link from "next/link";
+import Edit from "../../components/Edit";
 
 export const getStaticPaths = async () => {
   const paths = data.map((invoice) => ({
@@ -26,6 +27,7 @@ export const getStaticProps = async (context) => {
 
 export default function Slug({ invoice }) {
   const [windowInvoice, setWindowInvoice] = useState<InvoiceProps | null>(null);
+  const [edit, setEdit] = useState<boolean>(false);
   const { getItem } = useLocalStorage("value");
   const formattedDate = new Date(windowInvoice?.paymentDue).toLocaleDateString(
     "en-GB",
@@ -49,6 +51,7 @@ export default function Slug({ invoice }) {
   };
   return (
     <Layout>
+      <Edit edit={edit} />
       <Link
         href="/"
         className="flex justify-start items-baseline gap-x-4 font-bold px-6"
@@ -154,7 +157,10 @@ export default function Slug({ invoice }) {
       </div>
 
       <div className="flex justify-center py-5 bg-white">
-        <button className="bg-lightBG text-gray-500 text-sm font-semibold px-5 py-3 mx-1 rounded-3xl">
+        <button
+          className="bg-lightBG text-gray-500 text-sm font-semibold px-5 py-3 mx-1 rounded-3xl"
+          onClick={() => setEdit(!edit)}
+        >
           Edit
         </button>
         <button className="px-5 py-3 mx-1 bg-red text-white text-sm font-semibold rounded-3xl">

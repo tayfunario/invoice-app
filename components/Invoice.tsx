@@ -30,14 +30,14 @@ function Invoice({ invoice, setItem }: InvoiceObjProps) {
       className="mx-auto my-4 flex flex-col justify-between w-80 h-36 py-6 px-5 bg-white rounded-md"
     >
       <div className="flex justify-between">
-        <span>
-          #<span className="font-bold">{invoice.id}</span>
+        <span className="text-fadedPurple">
+          #<span className="text-black font-bold">{invoice.id}</span>
         </span>
         <span className="text-gray-500 text-sm">{invoice.clientName}</span>
       </div>
       <div className="flex justify-between">
         <div>
-          <p className="text-sm text-gray-500 mb-1">Due {formattedDate}</p>
+          <p className="text-sm text-fadedPurple mb-1">Due {formattedDate}</p>
           <span className="font-bold">£ {invoice.total}</span>
         </div>
         <div
