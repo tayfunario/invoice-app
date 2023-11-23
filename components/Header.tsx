@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 function Header() {
   return (
     <header className="flex justify-between items-center bg-black2">
@@ -15,13 +17,15 @@ function Header() {
       </div>
       <div className="flex h-[72px] divide-x divide-[#494E6E]">
         <div className="grid place-items-center px-5">
-          <img src="icon-moon.svg" alt="moon svg" />
+          <Image src="/icon-moon.svg" alt="moon svg" width="20" height="20" />
         </div>
         <div className="grid place-items-center px-5">
-          <img
-            src="image-avatar.jpg"
+          <Image
+            src="/image-avatar.jpg"
             className="w-10 h-10 rounded-full"
             alt="avatar"
+            width={40}
+            height={40}
           />
         </div>
       </div>

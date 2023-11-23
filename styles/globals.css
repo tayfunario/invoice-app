@@ -7,3 +7,7 @@
 * {
   @apply font-spartan;
 }
+
+.custom-shadow {
+  box-shadow: 0px 35px 50px 30px #b1b1b1;
+}
