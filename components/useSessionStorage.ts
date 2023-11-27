@@ -1,6 +1,6 @@
 import { InvoiceProps } from "../pages";
 
-export const useLocalStorage = (key: string) => {
+export const useSessionStorage = (key: string) => {
   const setItem = (value: InvoiceProps) => {
     window.sessionStorage.setItem(key, JSON.stringify(value));
   };

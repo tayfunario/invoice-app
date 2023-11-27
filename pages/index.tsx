@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Invoice from "../components/Invoice";
 import Top from "../components/Top";
 import Blank from "../components/Blank";
-import { useLocalStorage } from "../components/useSessionStorage";
+import { useSessionStorage } from "../components/useSessionStorage";
 import { data } from "../data.js";
 import Layout from "../components/Layout";
 
@@ -38,8 +38,8 @@ export interface InvoiceProps {
 
 export default function Home() {
   const [invoices, setInvoices] = useState<InvoiceProps[]>(data);
-  const { setItem } = useLocalStorage("value");
-
+  const { setItem, getItem } = useSessionStorage("value");
+  
   return (
     <Layout>
       <Top invNum={invoices.length} />

@@ -1,5 +1,5 @@
 import { data } from "../../data";
-import { useLocalStorage } from "../../components/useSessionStorage";
+import { useSessionStorage } from "../../components/useSessionStorage";
 import Layout from "../../components/Layout";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -28,7 +28,7 @@ export const getStaticProps = async (context) => {
 export default function Slug({ invoice }) {
   const [windowInvoice, setWindowInvoice] = useState<InvoiceProps | null>(null);
   const [edit, setEdit] = useState<boolean>(false);
-  const { getItem } = useLocalStorage("value");
+  const { getItem, setItem } = useSessionStorage("value");
   const formattedDate = new Date(windowInvoice?.paymentDue).toLocaleDateString(
     "en-GB",
     {
@@ -37,11 +37,6 @@ export default function Slug({ invoice }) {
       year: "numeric",
     }
   );
-
-  useEffect(() => {
-    setWindowInvoice(getItem());
-  }, []);
-
   const colors: {
     [key: string]: string;
   } = {
@@ -49,9 +44,21 @@ export default function Slug({ invoice }) {
     paid: "bg-green-100 text-green-500",
     draft: "bg-gray-100 text-gray-500",
   };
-  return (
+
+  useEffect(() => {
+    setWindowInvoice(getItem());
+  }, []);
+
+  const handleEdit = () => setEdit(false);
+
+  return edit ? (
+    <Edit
+      handleEdit={handleEdit}
+      windowInvoice={windowInvoice}
+      setWindow={setItem}
+    />
+  ) : (
     <Layout>
-      <Edit edit={edit} />
       <Link
         href="/"
         className="flex justify-start items-baseline gap-x-4 font-bold px-6"
@@ -129,12 +136,15 @@ export default function Slug({ invoice }) {
 
         <div id="sentto" className="mt-3">
           <p className="text-fadedPurple text-sm">Sent To</p>
-          <p className="font-bold">{windowInvoice?.clientEmail}</p>
+          <p className="font-bold text-black1">{windowInvoice?.clientEmail}</p>
         </div>
 
         <ul className="col-span-2 mt-5 pt-5 bg-[#F9FAFE] rounded-t-md">
-          {windowInvoice?.items.map((item) => (
-            <li className="flex justify-between items-center px-5 mb-4">
+          {windowInvoice?.items.map((item, index) => (
+            <li
+              key={index}
+              className="flex justify-between items-center px-5 mb-4"
+            >
               <div>
                 <h3 className="font-bold">{item.name}</h3>
                 <p className="font-bold text-fadedPurple">
