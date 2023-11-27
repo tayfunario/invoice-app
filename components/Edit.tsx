@@ -18,10 +18,12 @@ interface ItemArrayProps {
 }
 
 function Edit({ handleEdit, windowInvoice, setWindow }: EditProps) {
+  const [invoice, setInvoice] = useState<InvoiceProps | null>(null);
   const [items, setItems] = useState<ItemArrayProps[]>(windowInvoice?.items);
   const [inputs, setInputs] = useState<HTMLCollectionOf<HTMLInputElement>>(
     document.getElementsByTagName("input")
   );
+  const [terms, setTerms] = useState<number>(windowInvoice?.paymentTerms);
   const allFieldAlert = useRef<HTMLParagraphElement>();
   const itemAlert = useRef<HTMLParagraphElement>();
 
@@ -33,6 +35,10 @@ function Edit({ handleEdit, windowInvoice, setWindow }: EditProps) {
     refreshBorder();
     setInputs(document.getElementsByTagName("input"));
   }, [items]);
+
+  const handleTerms = (value: number) => {
+    setTerms(value);
+  };
 
   const refreshBorder = () => {
     for (let input of inputs) {
@@ -120,6 +126,22 @@ function Edit({ handleEdit, windowInvoice, setWindow }: EditProps) {
       }
     }
     if (save) handleEdit();
+  };
+
+  const writeSessionStorage = () => {
+    const createdAtInput = document.getElementById("date") as HTMLInputElement;
+    const createdAt = createdAtInput.value;
+
+    const descriptionInput = document.getElementById(
+      "description"
+    ) as HTMLInputElement;
+    const description = descriptionInput.value;
+
+    const invoice = {
+      id: windowInvoice?.id,
+      createdAt,
+      description,
+    };
   };
 
   return (
@@ -338,7 +360,7 @@ function Edit({ handleEdit, windowInvoice, setWindow }: EditProps) {
           >
             Payment Terms
           </label>
-          <Input />
+          <Input terms={terms} handleTerms={handleTerms} />
 
           <div className="flex flex-wrap items-center justify-between mt-5">
             <label
