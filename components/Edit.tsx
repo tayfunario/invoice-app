@@ -18,12 +18,13 @@ interface ItemArrayProps {
 }
 
 function Edit({ handleEdit, windowInvoice, setWindow }: EditProps) {
-  const [invoice, setInvoice] = useState<InvoiceProps | null>(null);
   const [items, setItems] = useState<ItemArrayProps[]>(windowInvoice?.items);
   const [inputs, setInputs] = useState<HTMLCollectionOf<HTMLInputElement>>(
     document.getElementsByTagName("input")
   );
-  const [terms, setTerms] = useState<number>(windowInvoice?.paymentTerms);
+  const [paymentTerms, setPaymentTerms] = useState<number>(
+    windowInvoice?.paymentTerms
+  );
   const allFieldAlert = useRef<HTMLParagraphElement>();
   const itemAlert = useRef<HTMLParagraphElement>();
 
@@ -36,8 +37,8 @@ function Edit({ handleEdit, windowInvoice, setWindow }: EditProps) {
     setInputs(document.getElementsByTagName("input"));
   }, [items]);
 
-  const handleTerms = (value: number) => {
-    setTerms(value);
+  const handlePaymentTerms = (value: number) => {
+    setPaymentTerms(value);
   };
 
   const refreshBorder = () => {
@@ -125,7 +126,10 @@ function Edit({ handleEdit, windowInvoice, setWindow }: EditProps) {
           break;
       }
     }
-    if (save) handleEdit();
+    if (save) {
+      writeSessionStorage();
+      handleEdit();
+    }
   };
 
   const writeSessionStorage = () => {
@@ -137,11 +141,80 @@ function Edit({ handleEdit, windowInvoice, setWindow }: EditProps) {
     ) as HTMLInputElement;
     const description = descriptionInput.value;
 
-    const invoice = {
+    const clientNameInput = document.getElementById(
+      "client-name"
+    ) as HTMLInputElement;
+    const clientName = clientNameInput.value;
+
+    const clientEmailInput = document.getElementById(
+      "client-email"
+    ) as HTMLInputElement;
+    const clientEmail = clientEmailInput.value;
+
+    const senderStreetInput = document.getElementById(
+      "street"
+    ) as HTMLInputElement;
+    const senderStreet = senderStreetInput.value;
+
+    const senderCityInput = document.getElementById("city") as HTMLInputElement;
+    const senderCity = senderCityInput.value;
+
+    const senderPostCodeInput = document.getElementById(
+      "post-code"
+    ) as HTMLInputElement;
+    const senderPostCode = senderPostCodeInput.value;
+
+    const senderCountryInput = document.getElementById(
+      "country"
+    ) as HTMLInputElement;
+    const senderCountry = senderCountryInput.value;
+
+    const toStreetInput = document.getElementById(
+      "tostreet"
+    ) as HTMLInputElement;
+    const toStreet = toStreetInput.value;
+
+    const toCityInput = document.getElementById("tocity") as HTMLInputElement;
+    const toCity = toCityInput.value;
+
+    const toPostcodeInput = document.getElementById(
+      "topost-code"
+    ) as HTMLInputElement;
+    const toPostcode = toPostcodeInput.value;
+
+    const toCountryInput = document.getElementById(
+      "tocountry"
+    ) as HTMLInputElement;
+    const toCountry = toCountryInput.value;
+
+    const total: number = items.reduce((sum, item) => sum + item.total, 0);
+
+    const invoice: InvoiceProps = {
       id: windowInvoice?.id,
       createdAt,
+      paymentDue: windowInvoice?.paymentDue,
       description,
+      paymentTerms,
+      clientName,
+      clientEmail,
+      status: windowInvoice?.status,
+      senderAddress: {
+        street: senderStreet,
+        city: senderCity,
+        postCode: senderPostCode,
+        country: senderCountry,
+      },
+      clientAddress: {
+        street: toStreet,
+        city: toCity,
+        postCode: toPostcode,
+        country: toCountry,
+      },
+      items,
+      total,
     };
+    setWindow(invoice);
+    console.log(invoice);
   };
 
   return (
@@ -360,7 +433,10 @@ function Edit({ handleEdit, windowInvoice, setWindow }: EditProps) {
           >
             Payment Terms
           </label>
-          <Input terms={terms} handleTerms={handleTerms} />
+          <Input
+            paymentTerms={paymentTerms}
+            handlePaymentTerms={handlePaymentTerms}
+          />
 
           <div className="flex flex-wrap items-center justify-between mt-5">
             <label

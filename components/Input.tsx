@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 
 interface InputProps {
-  terms: number;
-  handleTerms: (value: number) => void;
+  paymentTerms: number;
+  handlePaymentTerms: (value: number) => void;
 }
 
-function Input({ terms, handleTerms }: InputProps) {
+function Input({ paymentTerms, handlePaymentTerms }: InputProps) {
   const [show, setShow] = useState<boolean>(false);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ function Input({ terms, handleTerms }: InputProps) {
   }, []);
 
   const handleChosen = (value: number) => {
-    handleTerms(value);
+    handlePaymentTerms(value);
     setShow(false);
   };
 
@@ -36,7 +36,7 @@ function Input({ terms, handleTerms }: InputProps) {
         className="flex justify-between items-center w-full h-10 font-bold px-3 rounded-md border border-lightGray hover:border-customPurple"
         onClick={() => setShow(!show)}
       >
-        <span>Net {terms} Day(s)</span>
+        <span>Net {paymentTerms} Day(s)</span>
         <img src="/icon-arrow-down.svg" />
       </button>
 

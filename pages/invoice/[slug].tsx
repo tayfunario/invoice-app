@@ -47,7 +47,7 @@ export default function Slug({ invoice }) {
 
   useEffect(() => {
     setWindowInvoice(getItem());
-  }, []);
+  }, [edit]);
 
   const handleEdit = () => setEdit(false);
 

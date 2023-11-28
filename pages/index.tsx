@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Invoice from "../components/Invoice";
 import Top from "../components/Top";
 import Blank from "../components/Blank";
@@ -39,7 +39,7 @@ export interface InvoiceProps {
 export default function Home() {
   const [invoices, setInvoices] = useState<InvoiceProps[]>(data);
   const { setItem, getItem } = useSessionStorage("value");
-  
+
   return (
     <Layout>
       <Top invNum={invoices.length} />
