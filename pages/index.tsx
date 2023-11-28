@@ -37,41 +37,14 @@ export interface InvoiceProps {
 }
 
 export default function Home() {
-  const { setItem, setInitial, getInitial, getItem } = useSessionStorage();
+  const { setItem, getItem, setAllItems, getAllItems } = useSessionStorage();
 
   const [invoices, setInvioces] = useState<InvoiceProps[]>();
 
   useEffect(() => {
-    setInitial(data);
-    setInvioces(getInitial());
-    // compareAndUpdate();
+    setAllItems();
+    setInvioces(getAllItems());
   }, []);
-
-  useEffect(() => {
-    addSession();
-  }, [invoices]);
-
-  const addSession = () => {
-    const initial = getInitial();
-
-    initial?.push({
-      id: "1",
-      createdAt: "2021-08-18",
-      paymentDue: "2021-08-19",
-    });
-
-    setInitial(initial);
-  };
-
-  // const compareAndUpdate = () => {
-  //   if (!getItem()) return;
-
-  //   const initial = getInitial();
-  //   const item = getItem();
-  //   const index = initial.findIndex((invoice) => invoice.id === item.id);
-  //   initial[index] = item;
-  //   setInvioces(initial);
-  // };
 
   return (
     <Layout>

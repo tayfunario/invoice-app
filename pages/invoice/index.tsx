@@ -6,7 +6,7 @@ import { InvoiceProps } from "../index";
 import Link from "next/link";
 import Edit from "../../components/Edit";
 
-export default function Index({ invoice }) {
+export default function Index() {
   const [windowInvoice, setWindowInvoice] = useState<InvoiceProps | null>(null);
   const [edit, setEdit] = useState<boolean>(false);
   const { getItem, setItem } = useSessionStorage();
@@ -36,7 +36,6 @@ export default function Index({ invoice }) {
     <Edit
       handleEdit={handleEdit}
       windowInvoice={windowInvoice}
-      setWindow={setItem}
     />
   ) : (
     <Layout>

@@ -3,11 +3,11 @@ import Header from "./Header";
 import Input from "./Input";
 import { InvoiceProps } from "../pages/index";
 import { MdDelete } from "react-icons/md";
+import { useSessionStorage } from "./useSessionStorage";
 
 interface EditProps {
   handleEdit: () => void;
   windowInvoice: InvoiceProps | null;
-  setWindow: (value: InvoiceProps) => void;
 }
 
 interface ItemArrayProps {
@@ -17,7 +17,7 @@ interface ItemArrayProps {
   total: number;
 }
 
-function Edit({ handleEdit, windowInvoice, setWindow }: EditProps) {
+function Edit({ handleEdit, windowInvoice }: EditProps) {
   const [items, setItems] = useState<ItemArrayProps[]>(windowInvoice?.items);
   const [inputs, setInputs] = useState<HTMLCollectionOf<HTMLInputElement>>(
     document.getElementsByTagName("input")
@@ -25,6 +25,7 @@ function Edit({ handleEdit, windowInvoice, setWindow }: EditProps) {
   const [paymentTerms, setPaymentTerms] = useState<number>(
     windowInvoice?.paymentTerms
   );
+  const { setItem, updateAllItems } = useSessionStorage();
   const allFieldAlert = useRef<HTMLParagraphElement>();
   const itemAlert = useRef<HTMLParagraphElement>();
 
@@ -213,8 +214,8 @@ function Edit({ handleEdit, windowInvoice, setWindow }: EditProps) {
       items,
       total,
     };
-    setWindow(invoice);
-    console.log(invoice);
+    setItem(invoice);
+    updateAllItems();
   };
 
   return (
