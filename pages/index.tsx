@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Invoice from "../components/Invoice";
 import Top from "../components/Top";
 import Blank from "../components/Blank";
 import { useSessionStorage } from "../components/useSessionStorage";
-import { data } from "../data.js";
 import Layout from "../components/Layout";
+import { data } from "../data";
 
 export interface InvoiceProps {
   id: string;
@@ -37,18 +37,51 @@ export interface InvoiceProps {
 }
 
 export default function Home() {
-  const [invoices, setInvoices] = useState<InvoiceProps[]>(data);
-  const { setItem, getItem } = useSessionStorage("value");
+  const { setItem, setInitial, getInitial, getItem } = useSessionStorage();
+
+  const [invoices, setInvioces] = useState<InvoiceProps[]>();
+
+  useEffect(() => {
+    setInitial(data);
+    setInvioces(getInitial());
+    // compareAndUpdate();
+  }, []);
+
+  useEffect(() => {
+    addSession();
+  }, [invoices]);
+
+  const addSession = () => {
+    const initial = getInitial();
+
+    initial?.push({
+      id: "1",
+      createdAt: "2021-08-18",
+      paymentDue: "2021-08-19",
+    });
+
+    setInitial(initial);
+  };
+
+  // const compareAndUpdate = () => {
+  //   if (!getItem()) return;
+
+  //   const initial = getInitial();
+  //   const item = getItem();
+  //   const index = initial.findIndex((invoice) => invoice.id === item.id);
+  //   initial[index] = item;
+  //   setInvioces(initial);
+  // };
 
   return (
     <Layout>
-      <Top invNum={invoices.length} />
+      <Top invNum={invoices?.length} />
 
       <main>
         <section>
-          {invoices.length ? (
+          {invoices?.length ? (
             <ul className="pt-4 pb-10">
-              {invoices.map((invoice) => (
+              {invoices?.map((invoice) => (
                 <li key={invoice.id}>
                   <Invoice invoice={invoice} setItem={setItem} />
                 </li>
