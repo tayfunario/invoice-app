@@ -137,6 +137,12 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
     const createdAtInput = document.getElementById("date") as HTMLInputElement;
     const createdAt = createdAtInput.value;
 
+    const paymentDue = (): string => {
+      const date = new Date(createdAt);
+      date.setDate(date.getDate() + paymentTerms);
+      return date.toString();
+    };
+
     const descriptionInput = document.getElementById(
       "description"
     ) as HTMLInputElement;
@@ -193,7 +199,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
     const invoice: InvoiceProps = {
       id: windowInvoice?.id,
       createdAt,
-      paymentDue: windowInvoice?.paymentDue,
+      paymentDue: paymentDue(),
       description,
       paymentTerms,
       clientName,
