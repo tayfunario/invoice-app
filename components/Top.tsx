@@ -97,7 +97,7 @@ function Top({ invNum }: TopProps) {
             </li>
           </motion.ul>
         </div>
-        <button className="flex items-center gap-x-2 my-[2px] pl-1 pr-3 text-white text-sm font-bold bg-customPurple rounded-3xl">
+        <button className="button-1">
           <img
             src="icon-plus.svg"
             className="p-[9px] m-0 bg-white rounded-full"

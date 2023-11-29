@@ -8,6 +8,30 @@
   @apply font-spartan;
 }
 
+.button-1 {
+  @apply flex items-center gap-x-2 my-[2px] pl-1 pr-3 text-white text-sm font-bold bg-customPurple rounded-3xl;
+}
+
+.button-2 {
+  @apply text-sm font-semibold rounded-3xl bg-customPurple text-white py-[14px] px-4 tracking-tight;
+}
+
+.button-3 {
+  @apply text-sm font-semibold rounded-3xl bg-lightBG text-fadedPurple py-[14px] px-4 tracking-tight;
+}
+
+.button-5 {
+  @apply px-5 py-3 mx-1 bg-red text-white text-sm font-semibold rounded-3xl;
+}
+
+.button-6 {
+  @apply flex justify-center items-center gap-x-2 w-full mt-10 text-[15px] font-bold rounded-3xl bg-lightBG text-fadedPurple py-[14px] px-4 tracking-tight;
+}
+
+.custom-input {
+  @apply w-full basis-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple;
+}
+
 .custom-shadow {
   box-shadow: 0px 35px 50px 30px #b1b1b1;
 }
@@ -23,5 +47,5 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .remove-item-btn:hover .remove-icon {
-  @apply text-red
+  @apply text-red;
 }

@@ -33,7 +33,7 @@ function Input({ paymentTerms, handlePaymentTerms }: InputProps) {
   return (
     <div id="input-wrapper" className="relative">
       <button
-        className="flex justify-between items-center w-full h-10 font-bold px-3 rounded-md border border-lightGray hover:border-customPurple"
+        className={`flex justify-between items-center w-full h-10 font-bold px-3 rounded-md border border-lightGray ${show && "border-customPurple"} hover:border-customPurple`}
         onClick={() => setShow(!show)}
       >
         <span>Net {paymentTerms} Day(s)</span>

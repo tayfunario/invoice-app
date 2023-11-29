@@ -251,7 +251,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               type="text"
               defaultValue={windowInvoice?.senderAddress.street}
               maxLength={30}
-              className="w-full basis-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple"
+              className="custom-input"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
@@ -267,7 +267,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                 type="text"
                 defaultValue={windowInvoice?.senderAddress.city}
                 maxLength={20}
-                className="w-full basis-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple"
+                className="custom-input"
                 onChange={(e) => hideSpan(e.target)}
               />
             </div>
@@ -284,7 +284,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                 type="text"
                 defaultValue={windowInvoice?.senderAddress.postCode}
                 maxLength={10}
-                className="w-full basis-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple"
+                className="custom-input"
                 onChange={(e) => hideSpan(e.target)}
               />
             </div>
@@ -300,7 +300,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               type="text"
               defaultValue={windowInvoice?.senderAddress.country}
               maxLength={20}
-              className="w-full basis-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple"
+              className="custom-input"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
@@ -322,7 +322,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               type="text"
               defaultValue={windowInvoice?.clientName}
               maxLength={20}
-              className="w-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple"
+              className="custom-input"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
@@ -342,7 +342,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               type="email"
               defaultValue={windowInvoice?.clientEmail}
               maxLength={35}
-              className="w-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple"
+              className="custom-input"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
@@ -360,7 +360,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               type="text"
               defaultValue={windowInvoice?.clientAddress.street}
               maxLength={25}
-              className="w-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple"
+              className="custom-input"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
@@ -379,7 +379,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                 type="text"
                 defaultValue={windowInvoice?.clientAddress.city}
                 maxLength={20}
-                className="w-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple"
+                className="custom-input"
                 onChange={(e) => hideSpan(e.target)}
               />
             </div>
@@ -396,7 +396,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                 type="text"
                 defaultValue={windowInvoice?.clientAddress.postCode}
                 maxLength={10}
-                className="w-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple"
+                className="custom-input"
                 onChange={(e) => hideSpan(e.target)}
               />
             </div>
@@ -415,7 +415,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               type="text"
               defaultValue={windowInvoice?.clientAddress.country}
               maxLength={20}
-              className="w-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple"
+              className="custom-input"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
@@ -431,7 +431,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
             type="date"
             id="date"
             defaultValue={windowInvoice?.createdAt}
-            className="w-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple"
+            className="custom-input"
           />
 
           <label
@@ -457,7 +457,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               id="description"
               type="text"
               defaultValue={windowInvoice?.description}
-              className="w-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple"
+              className="custom-input"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
@@ -481,7 +481,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                   id={`item-${index + 1}`}
                   type="text"
                   defaultValue={item.name}
-                  className="w-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple"
+                  className="custom-input"
                   onChange={(e) => hideSpan(e.target)}
                 />
               </div>
@@ -498,7 +498,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                     type="number"
                     id={`quantity-${index + 1}`}
                     defaultValue={item.quantity}
-                    className="w-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple"
+                    className="custom-input"
                     onChange={(e) => handleQtyChange(e.target.value, index)}
                   />
                 </div>
@@ -514,7 +514,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                     type="number"
                     id={`price-${index + 1}`}
                     defaultValue={item.price}
-                    className="w-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple"
+                    className="custom-input"
                     onChange={(e) => handlePriceChange(e.target.value, index)}
                   />
                 </div>
@@ -537,7 +537,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
           ))}
 
           <button
-            className="flex justify-center items-center gap-x-2 w-full mt-10 text-[15px] font-bold rounded-3xl bg-lightBG text-fadedPurple py-[14px] px-4 tracking-tight"
+            className="button-6"
             onClick={() => addNewItem()}
           >
             <img src="/icon-plus.svg" />
@@ -560,13 +560,13 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
 
       <div className="fixed bottom-0 flex justify-end items-center gap-x-2 w-full h-20 px-5 custom-shadow bg-white">
         <button
-          className="text-sm font-semibold rounded-3xl bg-lightBG text-fadedPurple py-[14px] px-4 tracking-tight"
+          className="button-3"
           onClick={handleEdit}
         >
           Cancel
         </button>
         <button
-          className="text-sm font-semibold rounded-3xl bg-customPurple text-white py-[14px] px-4 tracking-tight"
+          className="button-2"
           onClick={() => save()}
         >
           Save Changes

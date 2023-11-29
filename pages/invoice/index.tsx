@@ -5,10 +5,12 @@ import Image from "next/image";
 import { InvoiceProps } from "../index";
 import Link from "next/link";
 import Edit from "../../components/Edit";
+import DeletionConfirmation from "../../components/DeletionConfirmation";
 
 export default function Index() {
   const [windowInvoice, setWindowInvoice] = useState<InvoiceProps | null>(null);
   const [edit, setEdit] = useState<boolean>(false);
+  const [deletion, setDeletion] = useState<boolean>(false);
   const { getItem, markAsPaid } = useSessionStorage();
   const statusRef = useRef<HTMLDivElement>(null);
   const colors: {
@@ -31,6 +33,8 @@ export default function Index() {
     });
   };
 
+  const handleDeletion = (value: boolean) => setDeletion(value);
+
   const handleEdit = () => setEdit(false);
 
   const handlePaidButton = () => {
@@ -44,6 +48,12 @@ export default function Index() {
     <Edit handleEdit={handleEdit} windowInvoice={windowInvoice} />
   ) : (
     <Layout>
+      {deletion && (
+        <DeletionConfirmation
+          handleDeletion={handleDeletion}
+          id={windowInvoice?.id}
+        />
+      )}
       <Link
         href="/"
         className="flex justify-start items-baseline gap-x-4 font-bold px-6"
@@ -159,7 +169,10 @@ export default function Index() {
         >
           Edit
         </button>
-        <button className="px-5 py-3 mx-1 bg-red text-white text-sm font-semibold rounded-3xl">
+        <button
+          className="px-5 py-3 mx-1 bg-red text-white text-sm font-semibold rounded-3xl"
+          onClick={() => handleDeletion(true)}
+        >
           Delete
         </button>
         <button
@@ -167,7 +180,12 @@ export default function Index() {
             windowInvoice?.status === "paid" ||
             windowInvoice?.status === "draft"
           }
-          className={`px-5 py-3 mx-1 ${(windowInvoice?.status === "paid" || windowInvoice?.status === "draft") ? "bg-gray-500":"bg-customPurple"} text-white text-sm font-semibold rounded-3xl`}
+          className={`px-5 py-3 mx-1 ${
+            windowInvoice?.status === "paid" ||
+            windowInvoice?.status === "draft"
+              ? "bg-gray-500"
+              : "bg-customPurple"
+          } text-white text-sm font-semibold rounded-3xl`}
           onClick={() => handlePaidButton()}
         >
           Mark as paid
