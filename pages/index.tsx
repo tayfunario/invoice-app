@@ -4,7 +4,6 @@ import Top from "../components/Top";
 import Blank from "../components/Blank";
 import { useSessionStorage } from "../components/useSessionStorage";
 import Layout from "../components/Layout";
-import { data } from "../data";
 
 export interface InvoiceProps {
   id: string;
