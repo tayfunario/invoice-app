@@ -46,6 +46,16 @@ export const useSessionStorage = () => {
     );
   };
 
+  const removeItem = () => {
+    const allItems = getAllItems();
+    const item = getItem();
+
+    const index = allItems.findIndex((elem) => elem.id === item.id);
+
+    allItems.splice(index, 1);
+    window.sessionStorage.setItem("allItems", JSON.stringify(allItems));
+  };
+
   return {
     setItem,
     getItem,
@@ -53,5 +63,6 @@ export const useSessionStorage = () => {
     getAllItems,
     updateAllItems,
     markAsPaid,
+    removeItem,
   };
 };
