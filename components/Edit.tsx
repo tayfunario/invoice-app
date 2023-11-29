@@ -204,7 +204,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
       paymentTerms,
       clientName,
       clientEmail,
-      status: windowInvoice?.status,
+      status: "pending",
       senderAddress: {
         street: senderStreet,
         city: senderCity,
