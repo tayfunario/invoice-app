@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Invoice from "../components/Invoice";
 import Top from "../components/Top";
 import Blank from "../components/Blank";
-import { useLocalStorage } from "../components/useSessionStorage";
-import { data } from "../data.js";
+import { useSessionStorage } from "../components/useSessionStorage";
 import Layout from "../components/Layout";
 
 export interface InvoiceProps {
@@ -37,18 +36,24 @@ export interface InvoiceProps {
 }
 
 export default function Home() {
-  const [invoices, setInvoices] = useState<InvoiceProps[]>(data);
-  const { setItem } = useLocalStorage("value");
+  const { setItem, getItem, setAllItems, getAllItems } = useSessionStorage();
+
+  const [invoices, setInvioces] = useState<InvoiceProps[]>();
+
+  useEffect(() => {
+    setAllItems();
+    setInvioces(getAllItems());
+  }, []);
 
   return (
     <Layout>
-      <Top invNum={invoices.length} />
+      <Top invNum={invoices?.length} />
 
       <main>
         <section>
-          {invoices.length ? (
+          {invoices?.length ? (
             <ul className="pt-4 pb-10">
-              {invoices.map((invoice) => (
+              {invoices?.map((invoice) => (
                 <li key={invoice.id}>
                   <Invoice invoice={invoice} setItem={setItem} />
                 </li>

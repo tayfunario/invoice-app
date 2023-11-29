@@ -1,5 +1,4 @@
-import { data } from "../../data";
-import { useLocalStorage } from "../../components/useSessionStorage";
+import { useSessionStorage } from "../../components/useSessionStorage";
 import Layout from "../../components/Layout";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -7,41 +6,10 @@ import { InvoiceProps } from "../index";
 import Link from "next/link";
 import Edit from "../../components/Edit";
 
-export const getStaticPaths = async () => {
-  const paths = data.map((invoice) => ({
-    params: { slug: invoice.id },
-  }));
-
-  return {
-    paths,
-    fallback: false,
-  };
-};
-
-export const getStaticProps = async (context) => {
-  const { slug } = context.params;
-  return {
-    props: { invoice: slug },
-  };
-};
-
-export default function Slug({ invoice }) {
+export default function Index() {
   const [windowInvoice, setWindowInvoice] = useState<InvoiceProps | null>(null);
   const [edit, setEdit] = useState<boolean>(false);
-  const { getItem } = useLocalStorage("value");
-  const formattedDate = new Date(windowInvoice?.paymentDue).toLocaleDateString(
-    "en-GB",
-    {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    }
-  );
-
-  useEffect(() => {
-    setWindowInvoice(getItem());
-  }, []);
-
+  const { getItem, setItem } = useSessionStorage();
   const colors: {
     [key: string]: string;
   } = {
@@ -49,9 +17,28 @@ export default function Slug({ invoice }) {
     paid: "bg-green-100 text-green-500",
     draft: "bg-gray-100 text-gray-500",
   };
-  return (
+
+  useEffect(() => {
+    setWindowInvoice(getItem());
+  }, [edit]);
+
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  const handleEdit = () => setEdit(false);
+
+  return edit ? (
+    <Edit
+      handleEdit={handleEdit}
+      windowInvoice={windowInvoice}
+    />
+  ) : (
     <Layout>
-      <Edit edit={edit} />
       <Link
         href="/"
         className="flex justify-start items-baseline gap-x-4 font-bold px-6"
@@ -79,7 +66,7 @@ export default function Slug({ invoice }) {
       <div className="grid grid-cols-2 bg-white p-4 my-10 mx-6 rounded-md shadow-md">
         <div className="col-span-2">
           <span>
-            #<span className="font-bold">{invoice}</span>
+            #<span className="font-bold">{windowInvoice?.id}</span>
           </span>
           <p className="text-fadedPurple text-sm">
             {windowInvoice?.description}
@@ -103,9 +90,9 @@ export default function Slug({ invoice }) {
 
         <div id="date" className="mt-5">
           <p className="text-fadedPurple text-sm">Invoice Date</p>
-          <p className="font-bold">{windowInvoice?.createdAt}</p>
+          <p className="font-bold">{formatDate(windowInvoice?.createdAt)}</p>
           <p className="mt-3 text-fadedPurple text-sm">Payment Due</p>
-          <p className="font-bold">{windowInvoice?.paymentDue}</p>
+          <p className="font-bold">{formatDate(windowInvoice?.paymentDue)}</p>
         </div>
 
         <div id="to" className="mt-5">
@@ -129,12 +116,15 @@ export default function Slug({ invoice }) {
 
         <div id="sentto" className="mt-3">
           <p className="text-fadedPurple text-sm">Sent To</p>
-          <p className="font-bold">{windowInvoice?.clientEmail}</p>
+          <p className="font-bold text-black1">{windowInvoice?.clientEmail}</p>
         </div>
 
         <ul className="col-span-2 mt-5 pt-5 bg-[#F9FAFE] rounded-t-md">
-          {windowInvoice?.items.map((item) => (
-            <li className="flex justify-between items-center px-5 mb-4">
+          {windowInvoice?.items.map((item, index) => (
+            <li
+              key={index}
+              className="flex justify-between items-center px-5 mb-4"
+            >
               <div>
                 <h3 className="font-bold">{item.name}</h3>
                 <p className="font-bold text-fadedPurple">

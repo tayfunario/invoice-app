@@ -25,7 +25,7 @@ function Invoice({ invoice, setItem }: InvoiceObjProps) {
 
   return (
     <Link
-      href={"/invoice/" + invoice.id}
+      href={"/invoice"}
       onClick={() => setItem(invoice)}
       className="mx-auto my-4 flex flex-col justify-between w-80 h-36 py-6 px-5 bg-white rounded-md"
     >
