@@ -25,10 +25,33 @@ export const useSessionStorage = () => {
     const allItems = getAllItems();
     const item = getItem();
 
-    const index = allItems.findIndex((invoice: InvoiceProps) => invoice.id === item.id);
+    const index = allItems.findIndex(
+      (invoice: InvoiceProps) => invoice.id === item.id
+    );
     allItems[index] = item;
     window.sessionStorage.setItem("allItems", JSON.stringify(allItems));
-  }
+  };
 
-  return { setItem, getItem, setAllItems, getAllItems, updateAllItems };
+  const markAsPaid = () => {
+    const allItems = getAllItems();
+    const item = getItem();
+    const index = allItems.findIndex(
+      (invoice: InvoiceProps) => invoice.id === item.id
+    );
+    allItems[index].status = "paid";
+    window.sessionStorage.setItem("allItems", JSON.stringify(allItems));
+    window.sessionStorage.setItem(
+      "singleItem",
+      JSON.stringify(allItems[index])
+    );
+  };
+
+  return {
+    setItem,
+    getItem,
+    setAllItems,
+    getAllItems,
+    updateAllItems,
+    markAsPaid,
+  };
 };

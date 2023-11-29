@@ -1,7 +1,7 @@
+import { useEffect, useState, useRef } from "react";
 import { useSessionStorage } from "../../components/useSessionStorage";
 import Layout from "../../components/Layout";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { InvoiceProps } from "../index";
 import Link from "next/link";
 import Edit from "../../components/Edit";
@@ -9,7 +9,8 @@ import Edit from "../../components/Edit";
 export default function Index() {
   const [windowInvoice, setWindowInvoice] = useState<InvoiceProps | null>(null);
   const [edit, setEdit] = useState<boolean>(false);
-  const { getItem, setItem } = useSessionStorage();
+  const { getItem, markAsPaid } = useSessionStorage();
+  const statusRef = useRef<HTMLDivElement>(null);
   const colors: {
     [key: string]: string;
   } = {
@@ -32,11 +33,15 @@ export default function Index() {
 
   const handleEdit = () => setEdit(false);
 
+  const handlePaidButton = () => {
+    markAsPaid();
+    statusRef.current.classList.remove("bg-orange-100", "text-orange-500");
+    statusRef.current.classList.add("bg-green-100", "text-green-500");
+    statusRef.current.innerHTML = `<span class="text-xl">•</span> Paid`;
+  };
+
   return edit ? (
-    <Edit
-      handleEdit={handleEdit}
-      windowInvoice={windowInvoice}
-    />
+    <Edit handleEdit={handleEdit} windowInvoice={windowInvoice} />
   ) : (
     <Layout>
       <Link
@@ -55,6 +60,7 @@ export default function Index() {
       <div className="flex justify-between items-center bg-white py-6 px-5 mt-5 mx-6 rounded-md">
         <span className="text-fadedPurple text-sm">Status</span>
         <div
+          ref={statusRef}
           className={`flex justify-center items-center w-24 h-10 gap-x-1 font-semibold capitalize ${
             colors[windowInvoice?.status]
           } rounded-md`}
@@ -156,7 +162,14 @@ export default function Index() {
         <button className="px-5 py-3 mx-1 bg-red text-white text-sm font-semibold rounded-3xl">
           Delete
         </button>
-        <button className="px-5 py-3 mx-1 bg-customPurple text-white text-sm font-semibold rounded-3xl">
+        <button
+          disabled={
+            windowInvoice?.status === "paid" ||
+            windowInvoice?.status === "draft"
+          }
+          className={`px-5 py-3 mx-1 ${(windowInvoice?.status === "paid" || windowInvoice?.status === "draft") ? "bg-gray-500":"bg-customPurple"} text-white text-sm font-semibold rounded-3xl`}
+          onClick={() => handlePaidButton()}
+        >
           Mark as paid
         </button>
       </div>
