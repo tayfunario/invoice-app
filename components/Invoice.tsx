@@ -15,6 +15,7 @@ function Invoice({ invoice, setItem }: InvoiceObjProps) {
       year: "numeric",
     }
   );
+
   const colors: {
     [key: string]: string;
   } = {
@@ -37,7 +38,9 @@ function Invoice({ invoice, setItem }: InvoiceObjProps) {
       </div>
       <div className="flex justify-between">
         <div>
-          <p className="text-sm text-fadedPurple mb-1">Due {formattedDate}</p>
+          {formattedDate !== "Invalid Date" && (
+            <p className="text-sm text-fadedPurple mb-1">Due {formattedDate}</p>
+          )}
           <span className="font-bold">£ {invoice.total}</span>
         </div>
         <div

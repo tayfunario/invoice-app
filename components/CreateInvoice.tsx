@@ -3,14 +3,21 @@ import Image from "next/image";
 import Header from "./Header";
 import { useState, useRef } from "react";
 import Input from "./Input";
+import { ItemArrayProps } from "./Edit";
+import { MdDelete } from "react-icons/md";
+import { useSessionStorage } from "./useSessionStorage";
+import { InvoiceProps } from "../pages";
 
 interface CreateInvoiceProps {
   handleCreate: (val: boolean) => void;
 }
 
 function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
+  const [items, setItems] = useState<ItemArrayProps[]>([]);
   const [paymentTerms, setPaymentTerms] = useState<number>();
   const allFieldAlert = useRef<HTMLParagraphElement>();
+  const itemAlert = useRef<HTMLParagraphElement>();
+  const { addNewItemToSS } = useSessionStorage();
 
   const hideSpan = (elem: HTMLInputElement) => {
     elem.previousElementSibling.classList.remove("block");
@@ -23,6 +30,133 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
 
   const handlePaymentTerms = (value: number) => {
     setPaymentTerms(value);
+  };
+
+  const handleQtyChange = (value: string, index: number) => {
+    const list = [...items];
+    list[index].quantity = Number(value);
+    list[index].total = Number(value) * list[index].price;
+    setItems(list);
+  };
+
+  const handlePriceChange = (value: string, index: number) => {
+    const list = [...items];
+    list[index].price = Number(value);
+    list[index].total = Number(value) * list[index].quantity;
+    setItems(list);
+  };
+
+  const addNewItem = () => {
+    setItems([...items, { name: "New Item", quantity: 1, price: 0, total: 0 }]);
+  };
+
+  const removeItem = (index: number) => {
+    const list = [...items];
+    list.splice(index, 1);
+    setItems(list);
+  };
+
+  const createID = (): string => {
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let str = "";
+    str += letters[Math.floor(Math.random() * 26)];
+    str += letters[Math.floor(Math.random() * 26)];
+    str += Math.floor(Math.random() * 10);
+    str += Math.floor(Math.random() * 10);
+    str += Math.floor(Math.random() * 10);
+    str += Math.floor(Math.random() * 10);
+    return str;
+  };
+
+  const handleDraft = () => {
+    const createdAtInput = document.getElementById("date") as HTMLInputElement;
+    const createdAt = createdAtInput.value;
+
+    const paymentDue = (): string => {
+      const date = new Date(createdAt);
+      date.setDate(date.getDate() + paymentTerms);
+      return date.toString();
+    };
+
+    const descriptionInput = document.getElementById(
+      "description"
+    ) as HTMLInputElement;
+    const description = descriptionInput.value;
+
+    const clientNameInput = document.getElementById(
+      "client-name"
+    ) as HTMLInputElement;
+    const clientName = clientNameInput.value;
+
+    const clientEmailInput = document.getElementById(
+      "client-email"
+    ) as HTMLInputElement;
+    const clientEmail = clientEmailInput.value;
+
+    const senderStreetInput = document.getElementById(
+      "street"
+    ) as HTMLInputElement;
+    const senderStreet = senderStreetInput.value;
+
+    const senderCityInput = document.getElementById("city") as HTMLInputElement;
+    const senderCity = senderCityInput.value;
+
+    const senderPostCodeInput = document.getElementById(
+      "post-code"
+    ) as HTMLInputElement;
+    const senderPostCode = senderPostCodeInput.value;
+
+    const senderCountryInput = document.getElementById(
+      "country"
+    ) as HTMLInputElement;
+    const senderCountry = senderCountryInput.value;
+
+    const toStreetInput = document.getElementById(
+      "tostreet"
+    ) as HTMLInputElement;
+    const toStreet = toStreetInput.value;
+
+    const toCityInput = document.getElementById("tocity") as HTMLInputElement;
+    const toCity = toCityInput.value;
+
+    const toPostcodeInput = document.getElementById(
+      "topost-code"
+    ) as HTMLInputElement;
+    const toPostcode = toPostcodeInput.value;
+
+    const toCountryInput = document.getElementById(
+      "tocountry"
+    ) as HTMLInputElement;
+    const toCountry = toCountryInput.value;
+
+    const total: number = items.reduce((sum, item) => sum + item.total, 0);
+
+    const invoice: InvoiceProps = {
+      id: createID(),
+      createdAt,
+      paymentDue: paymentDue(),
+      description,
+      paymentTerms,
+      clientName,
+      clientEmail,
+      status: "draft",
+      senderAddress: {
+        street: senderStreet,
+        city: senderCity,
+        postCode: senderPostCode,
+        country: senderCountry,
+      },
+      clientAddress: {
+        street: toStreet,
+        city: toCity,
+        postCode: toPostcode,
+        country: toCountry,
+      },
+      items,
+      total,
+    };
+    addNewItemToSS(invoice);
+    handleCreate(false)
   };
 
   return (
@@ -257,13 +391,106 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
             />
           </div>
         </fieldset>
+
+        <fieldset className="mt-10">
+          <legend className="font-bold text-customPurple">Item List</legend>
+
+          {items.map((item, index) => (
+            <div key={item.name} className="mb-12">
+              <div className="flex flex-wrap items-center justify-between mt-5">
+                <label
+                  key={index}
+                  className="block mb-2 text-fadedPurple text-sm"
+                  htmlFor={`item-${index + 1}`}
+                >
+                  Item Name
+                </label>
+                <span className="hidden text-red text-xs">can't be empty</span>
+                <input
+                  id={`item-${index + 1}`}
+                  type="text"
+                  className="custom-input"
+                  onChange={(e) => hideSpan(e.target)}
+                />
+              </div>
+
+              <div className="grid grid-cols-6 gap-x-2 mt-5">
+                <div>
+                  <label
+                    className="block mb-1 text-fadedPurple text-sm"
+                    htmlFor={`quantity-${index + 1}`}
+                  >
+                    Qty.
+                  </label>
+                  <input
+                    type="number"
+                    id={`quantity-${index + 1}`}
+                    defaultValue={item.quantity}
+                    className="custom-input"
+                    onChange={(e) => handleQtyChange(e.target.value, index)}
+                  />
+                </div>
+
+                <div className="col-span-2">
+                  <label
+                    className="block mb-1 text-fadedPurple text-sm"
+                    htmlFor={`price-${index + 1}`}
+                  >
+                    Price
+                  </label>
+                  <input
+                    type="number"
+                    id={`price-${index + 1}`}
+                    defaultValue={item.price}
+                    className="custom-input"
+                    onChange={(e) => handlePriceChange(e.target.value, index)}
+                  />
+                </div>
+
+                <div className="col-span-2">
+                  <p className="mb-1 text-fadedPurple text-sm">Total</p>
+                  <div className="flex items-center h-10 text-darkerGray font-bold text-[15px]">
+                    {item.total.toFixed(2)}
+                  </div>
+                </div>
+
+                <button
+                  className="remove-item-btn grid place-items-center self-center h-10"
+                  onClick={() => removeItem(index)}
+                >
+                  <MdDelete className="remove-icon w-6 h-6 text-darkerGray" />
+                </button>
+              </div>
+            </div>
+          ))}
+
+          <button className="button-6" onClick={() => addNewItem()}>
+            <img src="/icon-plus.svg" />
+            Add New Item
+          </button>
+
+          <p
+            ref={allFieldAlert}
+            className="invisible mt-7 text-red text-sm font-semibold"
+          >
+            -All fields must be added
+          </p>
+          {!items.length && (
+            <p ref={itemAlert} className="text-red text-sm font-semibold">
+              -An item must be added
+            </p>
+          )}
+        </fieldset>
       </form>
 
-      <div className="fixed bottom-0 flex justify-end items-center gap-x-2 w-full h-20 px-5 custom-shadow bg-white">
+      <div className="fixed bottom-0 flex justify-center items-center gap-x-2 w-full h-20 px-5 custom-shadow bg-white">
         <button className="button-3" onClick={() => handleCreate(false)}>
-          Cancel
+          Discard
         </button>
-        <button className="button-2">Save Changes</button>
+        <button className="button-4" onClick={() => handleDraft()}>
+          Save as Draft
+        </button>
+        <button className="button-2">Save & Send</button>
       </div>
     </div>
   );

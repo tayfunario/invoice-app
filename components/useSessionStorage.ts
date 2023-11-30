@@ -56,6 +56,12 @@ export const useSessionStorage = () => {
     window.sessionStorage.setItem("allItems", JSON.stringify(allItems));
   };
 
+  const addNewItemToSS = (newItem: InvoiceProps) => {
+    const allItems = getAllItems();
+    allItems.push(newItem);
+    window.sessionStorage.setItem("allItems", JSON.stringify(allItems));
+  };
+
   return {
     setItem,
     getItem,
@@ -64,5 +70,6 @@ export const useSessionStorage = () => {
     updateAllItems,
     markAsPaid,
     removeItem,
+    addNewItemToSS,
   };
 };

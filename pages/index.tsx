@@ -43,8 +43,11 @@ export default function Home() {
 
   useEffect(() => {
     setAllItems();
-    setInvioces(getAllItems());
   }, []);
+
+  useEffect(() => {
+    setInvioces(getAllItems());
+  }, [create]);
 
   const handleCreate = (val: boolean) => {
     setCreate(val);

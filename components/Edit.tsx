@@ -12,7 +12,7 @@ interface EditProps {
   windowInvoice: InvoiceProps | null;
 }
 
-interface ItemArrayProps {
+export interface ItemArrayProps {
   name: string;
   quantity: number;
   price: number;
