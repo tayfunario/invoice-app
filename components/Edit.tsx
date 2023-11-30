@@ -1,3 +1,5 @@
+import Image from "next/image";
+import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import Header from "./Header";
 import Input from "./Input";
@@ -225,12 +227,23 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
   };
 
   return (
-    <div className="w-full h-screen top-0 bg-white">
+    <div className="w-full h-screen">
       <Header />
-
+      <button
+        className="flex justify-start items-baseline gap-x-4 mt-8 font-bold px-6"
+        onClick={() => handleEdit()}
+      >
+        <Image
+          src="/icon-arrow-left.svg"
+          alt="left arrow"
+          width={7}
+          height={7}
+        />
+        Go back
+      </button>
       <form
         id="form1"
-        className="mt-10 mx-5 pb-32"
+        className="mt-5 mx-5 pb-32"
         onSubmit={(e) => e.preventDefault()}
       >
         <h2 className="font-bold text-2xl">
@@ -536,10 +549,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
             </div>
           ))}
 
-          <button
-            className="button-6"
-            onClick={() => addNewItem()}
-          >
+          <button className="button-6" onClick={() => addNewItem()}>
             <img src="/icon-plus.svg" />
             Add New Item
           </button>
@@ -559,16 +569,10 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
       </form>
 
       <div className="fixed bottom-0 flex justify-end items-center gap-x-2 w-full h-20 px-5 custom-shadow bg-white">
-        <button
-          className="button-3"
-          onClick={handleEdit}
-        >
+        <button className="button-3" onClick={handleEdit}>
           Cancel
         </button>
-        <button
-          className="button-2"
-          onClick={() => save()}
-        >
+        <button className="button-2" onClick={() => save()}>
           Save Changes
         </button>
       </div>

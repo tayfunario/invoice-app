@@ -24,9 +24,10 @@ const ulVariants = {
 
 interface TopProps {
   invNum: number;
+  handleCreate: (val: boolean) => void;
 }
 
-function Top({ invNum }: TopProps) {
+function Top({ invNum, handleCreate }: TopProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [filter, setFilter] = useState<string>("");
 
@@ -97,7 +98,7 @@ function Top({ invNum }: TopProps) {
             </li>
           </motion.ul>
         </div>
-        <button className="button-1">
+        <button className="button-1" onClick={() => handleCreate(true)}>
           <img
             src="icon-plus.svg"
             className="p-[9px] m-0 bg-white rounded-full"

@@ -4,6 +4,7 @@ import Top from "../components/Top";
 import Blank from "../components/Blank";
 import { useSessionStorage } from "../components/useSessionStorage";
 import Layout from "../components/Layout";
+import CreateInvoice from "../components/CreateInvoice";
 
 export interface InvoiceProps {
   id: string;
@@ -36,18 +37,24 @@ export interface InvoiceProps {
 }
 
 export default function Home() {
-  const { setItem, getItem, setAllItems, getAllItems } = useSessionStorage();
-
   const [invoices, setInvioces] = useState<InvoiceProps[]>();
+  const [create, setCreate] = useState<boolean>(false);
+  const { setItem, getItem, setAllItems, getAllItems } = useSessionStorage();
 
   useEffect(() => {
     setAllItems();
     setInvioces(getAllItems());
   }, []);
 
-  return (
+  const handleCreate = (val: boolean) => {
+    setCreate(val);
+  };
+
+  return create ? (
+    <CreateInvoice handleCreate={handleCreate} />
+  ) : (
     <Layout>
-      <Top invNum={invoices?.length} />
+      <Top invNum={invoices?.length} handleCreate={handleCreate} />
 
       <main>
         <section>
