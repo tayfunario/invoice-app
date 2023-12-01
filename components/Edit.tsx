@@ -128,7 +128,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
           break;
       }
     }
-    if (save) {
+    if (save && items.length) {
       writeSessionStorage();
       handleEdit();
     }
@@ -439,7 +439,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
             Invoice Date
           </label>
           <input
-            disabled
+            disabled={windowInvoice?.status !== "draft"}
             type="date"
             id="date"
             defaultValue={windowInvoice?.createdAt}

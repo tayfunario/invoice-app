@@ -34,7 +34,7 @@ function Toggle({
 
   const handleChosen = (value: number) => {
     handlePaymentTerms(value);
-    removeStyle();
+    if (removeStyle) removeStyle();
     setShow(false);
   };
 

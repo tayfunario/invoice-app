@@ -62,7 +62,7 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
 
   const removeStyle = () => {
     setToggleStyle("");
-  }
+  };
 
   const createID = (): string => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -177,50 +177,50 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
 
   const checkIfEveryInputIsValid = () => {
     let save: boolean = true;
-    // outerLoop: for (let input of inputs) {
-    //   switch (input.type) {
-    //     case "text":
-    //       const val = input.value.trim();
-    //       if (val.length === 0) {
-    //         input.classList.add("border-red");
-    //         showSpan(input);
-    //         save = false;
-    //         break outerLoop;
-    //       }
-    //       break;
-    //     case "email":
-    //       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    //       if (!emailRegex.test(input.value)) {
-    //         input.classList.add("border-red");
-    //         showSpan(input);
-    //         save = false;
-    //         break outerLoop;
-    //       }
-    //       break;
-    //     case "number":
-    //       if (Number(input.value) <= 0) {
-    //         input.classList.add("border-red");
-    //         save = false;
-    //         break outerLoop;
-    //       }
-    //       break;
-    //     case "date":
-    //       if (input.value.length === 0) {
-    //         input.classList.add("border-red");
-    //         showSpan(input);
-    //         save = false;
-    //         break outerLoop;
-    //       }
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // }
-    if (!paymentTerms) {
-      setToggleStyle("border-red");
-      save = false;
+    outerLoop: for (let input of inputs) {
+      switch (input.type) {
+        case "text":
+          const val = input.value.trim();
+          if (val.length === 0) {
+            input.classList.add("border-red");
+            showSpan(input);
+            save = false;
+            break outerLoop;
+          }
+          break;
+        case "email":
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(input.value)) {
+            input.classList.add("border-red");
+            showSpan(input);
+            save = false;
+            break outerLoop;
+          }
+          break;
+        case "number":
+          if (Number(input.value) <= 0) {
+            input.classList.add("border-red");
+            save = false;
+            break outerLoop;
+          }
+          break;
+        case "date":
+          if (input.value.length === 0) {
+            input.classList.add("border-red");
+            showSpan(input);
+            save = false;
+            break outerLoop;
+          }
+          break;
+        default:
+          break;
+      }
+      if (!paymentTerms) {
+        setToggleStyle("border-red");
+        save = false;
+      }
     }
-    if (save) {
+    if (save && items.length) {
       handleDraftOrSave("pending");
     }
   };
