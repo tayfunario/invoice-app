@@ -37,33 +37,47 @@ export interface InvoiceProps {
 }
 
 export default function Home() {
-  const [invoices, setInvioces] = useState<InvoiceProps[]>();
   const [create, setCreate] = useState<boolean>(false);
-  const { setItem, getItem, setAllItems, getAllItems } = useSessionStorage();
+  const { setItem, setAllItems, getAllItems } = useSessionStorage();
+  const [filteredInvoices, setFilteredInvoices] = useState<InvoiceProps[]>();
 
   useEffect(() => {
     setAllItems();
   }, []);
 
   useEffect(() => {
-    setInvioces(getAllItems());
+    setFilteredInvoices(getAllItems());
   }, [create]);
 
   const handleCreate = (val: boolean) => {
     setCreate(val);
   };
 
+  const handleFilter = (val: "all" | "paid" | "pending" | "draft") => {
+    if (val === "all") {
+      setFilteredInvoices(getAllItems());
+    } else {
+      setFilteredInvoices(
+        getAllItems().filter((invoice) => invoice.status === val)
+      );
+    }
+  };
+
   return create ? (
     <CreateInvoice handleCreate={handleCreate} />
   ) : (
     <Layout>
-      <Top invNum={invoices?.length} handleCreate={handleCreate} />
+      <Top
+        invNum={filteredInvoices?.length}
+        handleCreate={handleCreate}
+        handleFilter={handleFilter}
+      />
 
       <main>
         <section>
-          {invoices?.length ? (
+          {filteredInvoices?.length ? (
             <ul className="pt-4 pb-10">
-              {invoices?.map((invoice) => (
+              {filteredInvoices?.map((invoice) => (
                 <li key={invoice.id}>
                   <Invoice invoice={invoice} setItem={setItem} />
                 </li>
