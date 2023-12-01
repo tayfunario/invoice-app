@@ -1,57 +1,39 @@
+import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
 import Header from "./Header";
+import { useState, useRef, useEffect } from "react";
 import Toggle from "./Toggle";
-import { InvoiceProps } from "../pages/index";
+import { ItemArrayProps } from "./Edit";
 import { MdDelete } from "react-icons/md";
 import { useSessionStorage } from "./useSessionStorage";
+import { InvoiceProps } from "../pages";
 
-interface EditProps {
-  handleEdit: () => void;
-  windowInvoice: InvoiceProps | null;
+interface CreateInvoiceProps {
+  handleCreate: (val: boolean) => void;
 }
 
-export interface ItemArrayProps {
-  name: string;
-  quantity: number;
-  price: number;
-  total: number;
-}
-
-function Edit({ handleEdit, windowInvoice }: EditProps) {
-  const [items, setItems] = useState<ItemArrayProps[]>(windowInvoice?.items);
+function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
+  const [items, setItems] = useState<ItemArrayProps[]>([]);
+  const [paymentTerms, setPaymentTerms] = useState<number>(0);
   const [inputs, setInputs] = useState<HTMLCollectionOf<HTMLInputElement>>(
     document.getElementsByTagName("input")
   );
-  const [paymentTerms, setPaymentTerms] = useState<number>(
-    windowInvoice?.paymentTerms
-  );
-  const { setItem, updateAllItems } = useSessionStorage();
+  const [toggleStyle, setToggleStyle] = useState<"border-red" | "">("");
   const allFieldAlert = useRef<HTMLParagraphElement>();
   const itemAlert = useRef<HTMLParagraphElement>();
+  const { addNewItemToSS } = useSessionStorage();
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const hideSpan = (elem: HTMLInputElement) => {
+    elem.previousElementSibling.classList.remove("block");
+    elem.previousElementSibling.classList.add("hidden");
+    elem.classList.remove("border-red");
 
-  useEffect(() => {
-    refreshBorder();
-    setInputs(document.getElementsByTagName("input"));
-  }, [items]);
+    allFieldAlert.current.classList.remove("visible");
+    allFieldAlert.current.classList.add("invisible");
+  };
 
   const handlePaymentTerms = (value: number) => {
     setPaymentTerms(value);
-  };
-
-  const refreshBorder = () => {
-    for (let input of inputs) {
-      input.classList.remove("border-red");
-    }
-
-    const spans = document.querySelectorAll("span");
-    for (let span of spans) {
-      span.classList.remove("text-green-600");
-    }
   };
 
   const handleQtyChange = (value: string, index: number) => {
@@ -78,63 +60,23 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
     setItems(list);
   };
 
-  const showSpan = (elem: HTMLInputElement) => {
-    elem.previousElementSibling.classList.remove("hidden");
-    elem.previousElementSibling.classList.add("block");
-
-    allFieldAlert.current.classList.remove("invisible");
-    allFieldAlert.current.classList.add("visible");
+  const removeStyle = () => {
+    setToggleStyle("");
   };
 
-  const hideSpan = (elem: HTMLInputElement) => {
-    elem.previousElementSibling.classList.remove("block");
-    elem.previousElementSibling.classList.add("hidden");
-    elem.classList.remove("border-red");
-
-    allFieldAlert.current.classList.remove("visible");
-    allFieldAlert.current.classList.add("invisible");
+  const createID = (): string => {
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let str = "";
+    str += letters[Math.floor(Math.random() * 26)];
+    str += letters[Math.floor(Math.random() * 26)];
+    str += Math.floor(Math.random() * 10);
+    str += Math.floor(Math.random() * 10);
+    str += Math.floor(Math.random() * 10);
+    str += Math.floor(Math.random() * 10);
+    return str;
   };
 
-  const save = () => {
-    let save: boolean = true;
-    outerLoop: for (let input of inputs) {
-      switch (input.type) {
-        case "text":
-          const val = input.value.trim();
-          if (val.length === 0) {
-            input.classList.add("border-red");
-            showSpan(input);
-            save = false;
-            break outerLoop;
-          }
-          break;
-        case "email":
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (!emailRegex.test(input.value)) {
-            input.classList.add("border-red");
-            showSpan(input);
-            save = false;
-            break outerLoop;
-          }
-          break;
-        case "number":
-          if (Number(input.value) <= 0) {
-            input.classList.add("border-red");
-            save = false;
-            break outerLoop;
-          }
-          break;
-        default:
-          break;
-      }
-    }
-    if (save && items.length) {
-      writeSessionStorage();
-      handleEdit();
-    }
-  };
-
-  const writeSessionStorage = () => {
+  const handleDraftOrSave = (status: "draft" | "pending") => {
     const createdAtInput = document.getElementById("date") as HTMLInputElement;
     const createdAt = createdAtInput.value;
 
@@ -198,14 +140,14 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
     const total: number = items.reduce((sum, item) => sum + item.total, 0);
 
     const invoice: InvoiceProps = {
-      id: windowInvoice?.id,
+      id: createID(),
       createdAt,
       paymentDue: paymentDue(),
       description,
       paymentTerms,
       clientName,
       clientEmail,
-      status: "pending",
+      status,
       senderAddress: {
         street: senderStreet,
         city: senderCity,
@@ -221,16 +163,76 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
       items,
       total,
     };
-    setItem(invoice);
-    updateAllItems();
+    addNewItemToSS(invoice);
+    handleCreate(false);
+  };
+
+  const showSpan = (elem: HTMLInputElement) => {
+    elem.previousElementSibling.classList.remove("hidden");
+    elem.previousElementSibling.classList.add("block");
+
+    allFieldAlert.current.classList.remove("invisible");
+    allFieldAlert.current.classList.add("visible");
+  };
+
+  const checkIfEveryInputIsValid = () => {
+    let save: boolean = true;
+    outerLoop: for (let input of inputs) {
+      switch (input.type) {
+        case "text":
+          const val = input.value.trim();
+          if (val.length === 0) {
+            input.classList.add("border-red");
+            showSpan(input);
+            save = false;
+            break outerLoop;
+          }
+          break;
+        case "email":
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(input.value)) {
+            input.classList.add("border-red");
+            showSpan(input);
+            save = false;
+            break outerLoop;
+          }
+          break;
+        case "number":
+          if (Number(input.value) <= 0) {
+            input.classList.add("border-red");
+            save = false;
+            break outerLoop;
+          }
+          break;
+        case "date":
+          if (input.value.length === 0) {
+            input.classList.add("border-red");
+            showSpan(input);
+            save = false;
+            break outerLoop;
+          }
+          break;
+        default:
+          break;
+      }
+      if (!paymentTerms) {
+        setToggleStyle("border-red");
+        save = false;
+      }
+    }
+    if (save && items.length) {
+      handleDraftOrSave("pending");
+    }
   };
 
   return (
     <div className="w-full h-screen">
       <Header />
-      <button
+
+      <Link
+        href="/"
         className="flex justify-start items-baseline gap-x-4 mt-8 font-bold px-6"
-        onClick={() => handleEdit()}
+        onClick={() => handleCreate(false)}
       >
         <Image
           src="/icon-arrow-left.svg"
@@ -239,16 +241,14 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
           height={7}
         />
         Go back
-      </button>
+      </Link>
+
       <form
         id="form1"
         className="mt-5 mx-5 pb-32"
         onSubmit={(e) => e.preventDefault()}
       >
-        <h2 className="font-bold text-2xl">
-          Edit <span className="text-darkerGray">#</span>
-          {windowInvoice?.id}
-        </h2>
+        <h2 className="font-bold text-2xl tracking-tight">New Invoice</h2>
 
         <fieldset className="mt-5">
           <legend className="font-bold text-customPurple">Bill From</legend>
@@ -261,7 +261,6 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
             <input
               id="street"
               type="text"
-              defaultValue={windowInvoice?.senderAddress.street}
               maxLength={30}
               className="custom-input"
               onChange={(e) => hideSpan(e.target)}
@@ -269,7 +268,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
           </div>
 
           <div className="flex gap-x-4">
-            <div className="flex flex-wrap items-center justify-between mt-5">
+            <div className="flex basis-1/2 flex-wrap items-center justify-between mt-5">
               <label className="block text-fadedPurple text-sm" htmlFor="city">
                 City
               </label>
@@ -277,13 +276,12 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               <input
                 id="city"
                 type="text"
-                defaultValue={windowInvoice?.senderAddress.city}
                 maxLength={20}
                 className="custom-input"
                 onChange={(e) => hideSpan(e.target)}
               />
             </div>
-            <div className="flex flex-wrap items-center justify-between mt-5">
+            <div className="flex basis-1/2 flex-wrap items-center justify-between mt-5">
               <label
                 className="block text-fadedPurple text-sm"
                 htmlFor="post-code"
@@ -294,7 +292,6 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               <input
                 id="post-code"
                 type="text"
-                defaultValue={windowInvoice?.senderAddress.postCode}
                 maxLength={10}
                 className="custom-input"
                 onChange={(e) => hideSpan(e.target)}
@@ -310,7 +307,6 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
             <input
               id="country"
               type="text"
-              defaultValue={windowInvoice?.senderAddress.country}
               maxLength={20}
               className="custom-input"
               onChange={(e) => hideSpan(e.target)}
@@ -332,7 +328,6 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
             <input
               id="client-name"
               type="text"
-              defaultValue={windowInvoice?.clientName}
               maxLength={20}
               className="custom-input"
               onChange={(e) => hideSpan(e.target)}
@@ -352,7 +347,6 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
             <input
               id="client-email"
               type="email"
-              defaultValue={windowInvoice?.clientEmail}
               maxLength={35}
               className="custom-input"
               onChange={(e) => hideSpan(e.target)}
@@ -370,7 +364,6 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
             <input
               id="tostreet"
               type="text"
-              defaultValue={windowInvoice?.clientAddress.street}
               maxLength={25}
               className="custom-input"
               onChange={(e) => hideSpan(e.target)}
@@ -389,7 +382,6 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               <input
                 id="tocity"
                 type="text"
-                defaultValue={windowInvoice?.clientAddress.city}
                 maxLength={20}
                 className="custom-input"
                 onChange={(e) => hideSpan(e.target)}
@@ -406,7 +398,6 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               <input
                 id="topost-code"
                 type="text"
-                defaultValue={windowInvoice?.clientAddress.postCode}
                 maxLength={10}
                 className="custom-input"
                 onChange={(e) => hideSpan(e.target)}
@@ -425,30 +416,30 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
             <input
               id="tocountry"
               type="text"
-              defaultValue={windowInvoice?.clientAddress.country}
               maxLength={20}
               className="custom-input"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
 
-          <label
-            className="block mt-10 text-fadedPurple text-sm"
-            htmlFor="date"
-          >
-            Invoice Date
-          </label>
-          <input
-            disabled={windowInvoice?.status !== "draft"}
-            type="date"
-            id="date"
-            defaultValue={windowInvoice?.createdAt}
-            className="custom-input"
-          />
+          <div className="flex flex-wrap items-center justify-between mt-10">
+            <label className="block text-fadedPurple text-sm" htmlFor="date">
+              Invoice Date
+            </label>
+            <span className="hidden text-red text-xs">can't be empty</span>
+            <input
+              type="date"
+              id="date"
+              className="custom-input"
+              onChange={(e) => hideSpan(e.target)}
+            />
+          </div>
 
           <Toggle
             paymentTerms={paymentTerms}
             handlePaymentTerms={handlePaymentTerms}
+            style={toggleStyle}
+            removeStyle={removeStyle}
           />
 
           <div className="flex flex-wrap items-center justify-between mt-5">
@@ -462,7 +453,6 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
             <input
               id="description"
               type="text"
-              defaultValue={windowInvoice?.description}
               className="custom-input"
               onChange={(e) => hideSpan(e.target)}
             />
@@ -486,7 +476,6 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                 <input
                   id={`item-${index + 1}`}
                   type="text"
-                  defaultValue={item.name}
                   className="custom-input"
                   onChange={(e) => hideSpan(e.target)}
                 />
@@ -561,16 +550,19 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
         </fieldset>
       </form>
 
-      <div className="fixed bottom-0 flex justify-end items-center gap-x-2 w-full h-20 px-5 custom-shadow bg-white">
-        <button className="button-3" onClick={handleEdit}>
-          Cancel
+      <div className="fixed bottom-0 flex justify-center items-center gap-x-2 w-full h-20 px-5 custom-shadow bg-white">
+        <button className="button-3" onClick={() => handleCreate(false)}>
+          Discard
         </button>
-        <button className="button-2" onClick={() => save()}>
-          Save Changes
+        <button className="button-4" onClick={() => handleDraftOrSave("draft")}>
+          Save as Draft
+        </button>
+        <button className="button-2" onClick={() => checkIfEveryInputIsValid()}>
+          Save & Send
         </button>
       </div>
     </div>
   );
 }
 
-export default Edit;
+export default CreateInvoice;
