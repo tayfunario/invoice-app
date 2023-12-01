@@ -33,7 +33,7 @@
 }
 
 .custom-input {
-  @apply w-full basis-full h-10 font-bold text-[15px] px-3 rounded-md border border-lightGray focus:outline-none focus:border-customPurple;
+  @apply w-full basis-full h-10 font-bold text-[15px] px-3 rounded-md border focus:outline-none focus:border-customPurple;
 }
 
 .custom-shadow {

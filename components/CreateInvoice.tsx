@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import Header from "./Header";
-import { useState, useRef } from "react";
-import Input from "./Input";
+import { useState, useRef, useEffect } from "react";
+import Toggle from "./Toggle";
 import { ItemArrayProps } from "./Edit";
 import { MdDelete } from "react-icons/md";
 import { useSessionStorage } from "./useSessionStorage";
@@ -14,7 +14,11 @@ interface CreateInvoiceProps {
 
 function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
   const [items, setItems] = useState<ItemArrayProps[]>([]);
-  const [paymentTerms, setPaymentTerms] = useState<number>();
+  const [paymentTerms, setPaymentTerms] = useState<number>(0);
+  const [inputs, setInputs] = useState<HTMLCollectionOf<HTMLInputElement>>(
+    document.getElementsByTagName("input")
+  );
+  const [toggleStyle, setToggleStyle] = useState<"border-red" | "">("");
   const allFieldAlert = useRef<HTMLParagraphElement>();
   const itemAlert = useRef<HTMLParagraphElement>();
   const { addNewItemToSS } = useSessionStorage();
@@ -56,6 +60,10 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
     setItems(list);
   };
 
+  const removeStyle = () => {
+    setToggleStyle("");
+  }
+
   const createID = (): string => {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     let str = "";
@@ -68,7 +76,7 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
     return str;
   };
 
-  const handleDraft = () => {
+  const handleDraftOrSave = (status: "draft" | "pending") => {
     const createdAtInput = document.getElementById("date") as HTMLInputElement;
     const createdAt = createdAtInput.value;
 
@@ -139,7 +147,7 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
       paymentTerms,
       clientName,
       clientEmail,
-      status: "draft",
+      status,
       senderAddress: {
         street: senderStreet,
         city: senderCity,
@@ -156,7 +164,65 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
       total,
     };
     addNewItemToSS(invoice);
-    handleCreate(false)
+    handleCreate(false);
+  };
+
+  const showSpan = (elem: HTMLInputElement) => {
+    elem.previousElementSibling.classList.remove("hidden");
+    elem.previousElementSibling.classList.add("block");
+
+    allFieldAlert.current.classList.remove("invisible");
+    allFieldAlert.current.classList.add("visible");
+  };
+
+  const checkIfEveryInputIsValid = () => {
+    let save: boolean = true;
+    // outerLoop: for (let input of inputs) {
+    //   switch (input.type) {
+    //     case "text":
+    //       const val = input.value.trim();
+    //       if (val.length === 0) {
+    //         input.classList.add("border-red");
+    //         showSpan(input);
+    //         save = false;
+    //         break outerLoop;
+    //       }
+    //       break;
+    //     case "email":
+    //       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //       if (!emailRegex.test(input.value)) {
+    //         input.classList.add("border-red");
+    //         showSpan(input);
+    //         save = false;
+    //         break outerLoop;
+    //       }
+    //       break;
+    //     case "number":
+    //       if (Number(input.value) <= 0) {
+    //         input.classList.add("border-red");
+    //         save = false;
+    //         break outerLoop;
+    //       }
+    //       break;
+    //     case "date":
+    //       if (input.value.length === 0) {
+    //         input.classList.add("border-red");
+    //         showSpan(input);
+    //         save = false;
+    //         break outerLoop;
+    //       }
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // }
+    if (!paymentTerms) {
+      setToggleStyle("border-red");
+      save = false;
+    }
+    if (save) {
+      handleDraftOrSave("pending");
+    }
   };
 
   return (
@@ -202,7 +268,7 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
           </div>
 
           <div className="flex gap-x-4">
-            <div className="flex flex-wrap items-center justify-between mt-5">
+            <div className="flex basis-1/2 flex-wrap items-center justify-between mt-5">
               <label className="block text-fadedPurple text-sm" htmlFor="city">
                 City
               </label>
@@ -215,7 +281,7 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
                 onChange={(e) => hideSpan(e.target)}
               />
             </div>
-            <div className="flex flex-wrap items-center justify-between mt-5">
+            <div className="flex basis-1/2 flex-wrap items-center justify-between mt-5">
               <label
                 className="block text-fadedPurple text-sm"
                 htmlFor="post-code"
@@ -356,23 +422,24 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
             />
           </div>
 
-          <label
-            className="block mt-10 text-fadedPurple text-sm"
-            htmlFor="date"
-          >
-            Invoice Date
-          </label>
-          <input type="date" id="date" className="custom-input" />
+          <div className="flex flex-wrap items-center justify-between mt-10">
+            <label className="block text-fadedPurple text-sm" htmlFor="date">
+              Invoice Date
+            </label>
+            <span className="hidden text-red text-xs">can't be empty</span>
+            <input
+              type="date"
+              id="date"
+              className="custom-input"
+              onChange={(e) => hideSpan(e.target)}
+            />
+          </div>
 
-          <label
-            id="payment-terms-label"
-            className="block mt-5 text-fadedPurple text-sm"
-          >
-            Payment Terms
-          </label>
-          <Input
+          <Toggle
             paymentTerms={paymentTerms}
             handlePaymentTerms={handlePaymentTerms}
+            style={toggleStyle}
+            removeStyle={removeStyle}
           />
 
           <div className="flex flex-wrap items-center justify-between mt-5">
@@ -487,10 +554,12 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
         <button className="button-3" onClick={() => handleCreate(false)}>
           Discard
         </button>
-        <button className="button-4" onClick={() => handleDraft()}>
+        <button className="button-4" onClick={() => handleDraftOrSave("draft")}>
           Save as Draft
         </button>
-        <button className="button-2">Save & Send</button>
+        <button className="button-2" onClick={() => checkIfEveryInputIsValid()}>
+          Save & Send
+        </button>
       </div>
     </div>
   );

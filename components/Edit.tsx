@@ -1,8 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import Header from "./Header";
-import Input from "./Input";
+import Toggle from "./Toggle";
 import { InvoiceProps } from "../pages/index";
 import { MdDelete } from "react-icons/md";
 import { useSessionStorage } from "./useSessionStorage";
@@ -447,13 +446,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
             className="custom-input"
           />
 
-          <label
-            id="payment-terms-label"
-            className="block mt-5 text-fadedPurple text-sm"
-          >
-            Payment Terms
-          </label>
-          <Input
+          <Toggle
             paymentTerms={paymentTerms}
             handlePaymentTerms={handlePaymentTerms}
           />
