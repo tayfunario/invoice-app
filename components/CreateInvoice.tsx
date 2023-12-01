@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Header from "./Header";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Toggle from "./Toggle";
 import { ItemArrayProps } from "./Edit";
 import { MdDelete } from "react-icons/md";

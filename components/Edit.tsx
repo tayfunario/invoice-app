@@ -26,6 +26,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
   const [paymentTerms, setPaymentTerms] = useState<number>(
     windowInvoice?.paymentTerms
   );
+  const [toggleStyle, setToggleStyle] = useState<"border-red" | "">("");
   const { setItem, updateAllItems } = useSessionStorage();
   const allFieldAlert = useRef<HTMLParagraphElement>();
   const itemAlert = useRef<HTMLParagraphElement>();
@@ -78,6 +79,10 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
     setItems(list);
   };
 
+  const removeStyle = () => {
+    setToggleStyle("");
+  };
+
   const showSpan = (elem: HTMLInputElement) => {
     elem.previousElementSibling.classList.remove("hidden");
     elem.previousElementSibling.classList.add("block");
@@ -95,7 +100,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
     allFieldAlert.current.classList.add("invisible");
   };
 
-  const save = () => {
+  const checkIfEveryInputIsValid = () => {
     let save: boolean = true;
     outerLoop: for (let input of inputs) {
       switch (input.type) {
@@ -124,8 +129,20 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
             break outerLoop;
           }
           break;
+        case "date":
+          if (input.value.length === 0) {
+            input.classList.add("border-red");
+            showSpan(input);
+            save = false;
+            break outerLoop;
+          }
+          break;
         default:
           break;
+      }
+      if (!paymentTerms) {
+        setToggleStyle("border-red");
+        save = false;
       }
     }
     if (save && items.length) {
@@ -432,23 +449,26 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
             />
           </div>
 
-          <label
-            className="block mt-10 text-fadedPurple text-sm"
-            htmlFor="date"
-          >
-            Invoice Date
-          </label>
-          <input
-            disabled={windowInvoice?.status !== "draft"}
-            type="date"
-            id="date"
-            defaultValue={windowInvoice?.createdAt}
-            className="custom-input"
-          />
+          <div className="flex flex-wrap items-center justify-between mt-10">
+            <label className="block text-fadedPurple text-sm" htmlFor="date">
+              Invoice Date
+            </label>
+            <span className="hidden text-red text-xs">can't be empty</span>
+            <input
+              disabled={windowInvoice?.status !== "draft"}
+              type="date"
+              id="date"
+              defaultValue={windowInvoice?.createdAt}
+              className="custom-input"
+              onChange={(e) => hideSpan(e.target)}
+            />
+          </div>
 
           <Toggle
             paymentTerms={paymentTerms}
             handlePaymentTerms={handlePaymentTerms}
+            style={toggleStyle}
+            removeStyle={removeStyle}
           />
 
           <div className="flex flex-wrap items-center justify-between mt-5">
@@ -565,7 +585,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
         <button className="button-3" onClick={handleEdit}>
           Cancel
         </button>
-        <button className="button-2" onClick={() => save()}>
+        <button className="button-2" onClick={() => checkIfEveryInputIsValid()}>
           Save Changes
         </button>
       </div>
