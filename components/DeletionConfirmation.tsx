@@ -15,8 +15,8 @@ function DeletionConfirmation({
 
   return (
     <div className="fixed top-0 inset-0 grid place-content-center px-7 bg-black bg-opacity-60 z-20">
-      <div className="bg-white pt-10 pb-5 px-8 rounded-lg">
-        <h2 className="mb-3 font-bold text-2xl tracking-tight">
+      <div className="bg-white dark:bg-dark pt-10 pb-5 px-8 rounded-lg">
+        <h2 className="mb-3 font-bold text-2xl dark:text-white tracking-tight">
           Confirm Deletion
         </h2>
         <p className="mb-5 text-darkerGray text-sm">
