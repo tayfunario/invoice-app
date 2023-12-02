@@ -2,7 +2,7 @@ import Image from "next/image";
 
 function Header() {
   return (
-    <header className="flex justify-between items-center bg-black2">
+    <header className="flex justify-between items-center bg-[#373B53] dark:bg-dark">
       <div className="relative grid place-items-center w-[72px] h-[72px] bg-customPurple rounded-r-2xl overflow-hidden">
         <svg
           width="28"
@@ -17,7 +17,13 @@ function Header() {
       </div>
       <div className="flex h-[72px] divide-x divide-[#494E6E]">
         <div className="grid place-items-center px-5">
-          <Image src="/icon-moon.svg" alt="moon svg" width="20" height="20" />
+          <Image
+            src="/icon-moon.svg"
+            alt="moon svg"
+            width="20"
+            height="20"
+            onClick={() => document.documentElement.classList.toggle("dark")}
+          />
         </div>
         <div className="grid place-items-center px-5">
           <Image

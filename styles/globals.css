@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 * {
-  @apply font-spartan;
+  @apply font-spartan transition-all;
 }
 
 .button-1 {
