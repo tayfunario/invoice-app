@@ -17,7 +17,7 @@
 }
 
 .button-3 {
-  @apply text-sm font-semibold rounded-3xl bg-lightBG text-fadedPurple py-[14px] px-4 tracking-tight;
+  @apply text-sm font-semibold rounded-3xl bg-lightBG dark:bg-darkBlue text-fadedPurple dark:text-lightGray py-[14px] px-5 tracking-tight;
 }
 
 .button-4 {
