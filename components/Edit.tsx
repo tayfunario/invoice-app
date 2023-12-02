@@ -47,11 +47,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
   const refreshBorder = () => {
     for (let input of inputs) {
       input.classList.remove("border-red");
-    }
-
-    const spans = document.querySelectorAll("span");
-    for (let span of spans) {
-      span.classList.remove("text-green-600");
+      input.classList.add("border-lightGray");
+      input.classList.add("dark:border-darkBlue");
     }
   };
 
@@ -94,7 +91,10 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
   const hideSpan = (elem: HTMLInputElement) => {
     elem.previousElementSibling.classList.remove("block");
     elem.previousElementSibling.classList.add("hidden");
+
     elem.classList.remove("border-red");
+    elem.classList.add("border-lightGray");
+    elem.classList.add("dark:border-darkBlue");
 
     allFieldAlert.current.classList.remove("visible");
     allFieldAlert.current.classList.add("invisible");
@@ -107,6 +107,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
         case "text":
           const val = input.value.trim();
           if (val.length === 0) {
+            input.classList.remove("border-lightGray");
+            input.classList.remove("dark:border-darkBlue");
             input.classList.add("border-red");
             showSpan(input);
             save = false;
@@ -116,6 +118,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
         case "email":
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           if (!emailRegex.test(input.value)) {
+            input.classList.remove("border-lightGray");
+            input.classList.remove("dark:border-darkBlue");
             input.classList.add("border-red");
             showSpan(input);
             save = false;
@@ -124,6 +128,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
           break;
         case "number":
           if (Number(input.value) <= 0) {
+            input.classList.remove("border-lightGray");
+            input.classList.remove("dark:border-darkBlue");
             input.classList.add("border-red");
             save = false;
             break outerLoop;
@@ -131,6 +137,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
           break;
         case "date":
           if (input.value.length === 0) {
+            input.classList.remove("border-lightGray");
+            input.classList.remove("dark:border-darkBlue");
             input.classList.add("border-red");
             showSpan(input);
             save = false;
@@ -243,10 +251,10 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
   };
 
   return (
-    <div className="w-full h-screen">
+    <div className="w-full dark:bg-black2">
       <Header />
       <button
-        className="flex justify-start items-baseline gap-x-4 mt-8 font-bold px-6"
+        className="flex justify-start items-baseline gap-x-4 dark:text-white font-bold mt-10 px-6"
         onClick={() => handleEdit()}
       >
         <Image
@@ -262,7 +270,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
         className="mt-5 mx-5 pb-32"
         onSubmit={(e) => e.preventDefault()}
       >
-        <h2 className="font-bold text-2xl">
+        <h2 className="font-bold text-2xl dark:text-white">
           Edit <span className="text-darkerGray">#</span>
           {windowInvoice?.id}
         </h2>
@@ -271,7 +279,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
           <legend className="font-bold text-customPurple">Bill From</legend>
 
           <div className="flex flex-wrap items-center justify-between mt-5">
-            <label className="block text-fadedPurple text-sm" htmlFor="street">
+            <label className="input-label" htmlFor="street">
               Street Address
             </label>
             <span className="hidden text-red text-xs">can't be empty</span>
@@ -280,14 +288,14 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               type="text"
               defaultValue={windowInvoice?.senderAddress.street}
               maxLength={30}
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
 
           <div className="flex gap-x-4">
             <div className="flex flex-wrap items-center justify-between mt-5">
-              <label className="block text-fadedPurple text-sm" htmlFor="city">
+              <label className="input-label" htmlFor="city">
                 City
               </label>
               <span className="hidden text-red text-xs">can't be empty</span>
@@ -296,15 +304,12 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                 type="text"
                 defaultValue={windowInvoice?.senderAddress.city}
                 maxLength={20}
-                className="custom-input"
+                className="custom-input border-lightGray dark:border-darkBlue"
                 onChange={(e) => hideSpan(e.target)}
               />
             </div>
             <div className="flex flex-wrap items-center justify-between mt-5">
-              <label
-                className="block text-fadedPurple text-sm"
-                htmlFor="post-code"
-              >
+              <label className="input-label" htmlFor="post-code">
                 Post Code
               </label>
               <span className="hidden text-red text-xs">can't be empty</span>
@@ -313,14 +318,14 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                 type="text"
                 defaultValue={windowInvoice?.senderAddress.postCode}
                 maxLength={10}
-                className="custom-input"
+                className="custom-input border-lightGray dark:border-darkBlue"
                 onChange={(e) => hideSpan(e.target)}
               />
             </div>
           </div>
 
           <div className="flex flex-wrap items-center justify-between mt-5">
-            <label className="block text-fadedPurple text-sm" htmlFor="country">
+            <label className="input-label" htmlFor="country">
               Country
             </label>
             <span className="hidden text-red text-xs">can't be empty</span>
@@ -329,7 +334,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               type="text"
               defaultValue={windowInvoice?.senderAddress.country}
               maxLength={20}
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
@@ -339,10 +344,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
           <legend className="font-bold text-customPurple">Bill To</legend>
 
           <div className="flex flex-wrap items-center justify-between mt-5">
-            <label
-              className="block text-fadedPurple text-sm"
-              htmlFor="client-name"
-            >
+            <label className="input-label" htmlFor="client-name">
               Client's Name
             </label>
             <span className="hidden text-red text-xs">can't be empty</span>
@@ -351,16 +353,13 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               type="text"
               defaultValue={windowInvoice?.clientName}
               maxLength={20}
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
 
           <div className="flex flex-wrap items-center justify-between mt-5">
-            <label
-              className="block text-fadedPurple text-sm"
-              htmlFor="client-email"
-            >
+            <label className="input-label" htmlFor="client-email">
               Client's Email
             </label>
             <span className="hidden text-red text-xs">
@@ -371,16 +370,13 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               type="email"
               defaultValue={windowInvoice?.clientEmail}
               maxLength={35}
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
 
           <div className="flex flex-wrap items-center justify-between mt-5">
-            <label
-              className="block text-fadedPurple text-sm"
-              htmlFor="tostreet"
-            >
+            <label className="input-label" htmlFor="tostreet">
               Street Address
             </label>
             <span className="hidden text-red text-xs">can't be empty</span>
@@ -389,17 +385,14 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               type="text"
               defaultValue={windowInvoice?.clientAddress.street}
               maxLength={25}
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
 
           <div className="flex gap-x-4">
             <div className="flex basis-1/2 flex-wrap items-center justify-between mt-5">
-              <label
-                className="block text-fadedPurple text-sm"
-                htmlFor="tocity"
-              >
+              <label className="input-label" htmlFor="tocity">
                 City
               </label>
               <span className="hidden text-red text-xs">can't be empty</span>
@@ -408,15 +401,12 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                 type="text"
                 defaultValue={windowInvoice?.clientAddress.city}
                 maxLength={20}
-                className="custom-input"
+                className="custom-input border-lightGray dark:border-darkBlue"
                 onChange={(e) => hideSpan(e.target)}
               />
             </div>
             <div className="flex basis-1/2 flex-wrap items-center justify-between mt-5">
-              <label
-                className="block text-fadedPurple text-sm"
-                htmlFor="topost-code"
-              >
+              <label className="input-label" htmlFor="topost-code">
                 Post Code
               </label>
               <span className="hidden text-red text-xs">can't be empty</span>
@@ -425,17 +415,14 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                 type="text"
                 defaultValue={windowInvoice?.clientAddress.postCode}
                 maxLength={10}
-                className="custom-input"
+                className="custom-input border-lightGray dark:border-darkBlue"
                 onChange={(e) => hideSpan(e.target)}
               />
             </div>
           </div>
 
           <div className="flex flex-wrap items-center justify-between mt-5">
-            <label
-              className="block text-fadedPurple text-sm"
-              htmlFor="tocountry"
-            >
+            <label className="input-label" htmlFor="tocountry">
               Country
             </label>
             <span className="hidden text-red text-xs">can't be empty</span>
@@ -444,13 +431,13 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               type="text"
               defaultValue={windowInvoice?.clientAddress.country}
               maxLength={20}
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
 
           <div className="flex flex-wrap items-center justify-between mt-10">
-            <label className="block text-fadedPurple text-sm" htmlFor="date">
+            <label className="input-label" htmlFor="date">
               Invoice Date
             </label>
             <span className="hidden text-red text-xs">can't be empty</span>
@@ -459,7 +446,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               type="date"
               id="date"
               defaultValue={windowInvoice?.createdAt}
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
@@ -472,10 +459,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
           />
 
           <div className="flex flex-wrap items-center justify-between mt-5">
-            <label
-              className="block text-fadedPurple text-sm"
-              htmlFor="description"
-            >
+            <label className="input-label" htmlFor="description">
               Project Description
             </label>
             <span className="hidden text-red text-xs">can't be empty</span>
@@ -483,7 +467,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               id="description"
               type="text"
               defaultValue={windowInvoice?.description}
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
             />
           </div>
@@ -497,7 +481,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               <div className="flex flex-wrap items-center justify-between mt-5">
                 <label
                   key={index}
-                  className="block mb-2 text-fadedPurple text-sm"
+                  className="input-label mb-2"
                   htmlFor={`item-${index + 1}`}
                 >
                   Item Name
@@ -507,7 +491,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                   id={`item-${index + 1}`}
                   type="text"
                   defaultValue={item.name}
-                  className="custom-input"
+                  className="custom-input border-lightGray dark:border-darkBlue"
                   onChange={(e) => hideSpan(e.target)}
                 />
               </div>
@@ -524,7 +508,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                     type="number"
                     id={`quantity-${index + 1}`}
                     defaultValue={item.quantity}
-                    className="custom-input"
+                    className="custom-input border-lightGray dark:border-darkBlue"
                     onChange={(e) => handleQtyChange(e.target.value, index)}
                   />
                 </div>
@@ -540,7 +524,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                     type="number"
                     id={`price-${index + 1}`}
                     defaultValue={item.price}
-                    className="custom-input"
+                    className="custom-input border-lightGray dark:border-darkBlue"
                     onChange={(e) => handlePriceChange(e.target.value, index)}
                   />
                 </div>
@@ -581,7 +565,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
         </fieldset>
       </form>
 
-      <div className="fixed bottom-0 flex justify-end items-center gap-x-2 w-full h-20 px-5 custom-shadow bg-white">
+      <div className="fixed bottom-0 flex justify-end items-center gap-x-2 w-full h-20 px-5 custom-shadow dark:shadow-none bg-white dark:bg-dark">
         <button className="button-3" onClick={handleEdit}>
           Cancel
         </button>

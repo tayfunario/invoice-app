@@ -29,11 +29,15 @@
 }
 
 .button-6 {
-  @apply flex justify-center items-center gap-x-2 w-full mt-10 text-[15px] font-bold rounded-3xl bg-lightBG text-fadedPurple hover:bg-lightGray py-[14px] px-4 tracking-tight;
+  @apply flex justify-center items-center gap-x-2 w-full mt-10 text-[15px] font-bold rounded-3xl bg-lightBG text-fadedPurple hover:bg-lightGray dark:bg-darkBlue dark:text-darkerGray dark:hover:bg-dark py-[14px] px-4 tracking-tight;
+}
+
+.input-label {
+  @apply block text-fadedPurple dark:text-darkerGray text-sm;
 }
 
 .custom-input {
-  @apply w-full basis-full h-10 font-bold text-[15px] px-3 rounded-md border focus:outline-none focus:border-customPurple;
+  @apply w-full basis-full h-10 font-bold text-[15px] px-3 rounded-md border dark:text-white dark:bg-dark outline-transparent focus:outline-none focus:border-customPurple;
 }
 
 .custom-shadow {
