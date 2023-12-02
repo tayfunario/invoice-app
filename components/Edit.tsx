@@ -26,7 +26,9 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
   const [paymentTerms, setPaymentTerms] = useState<number>(
     windowInvoice?.paymentTerms
   );
-  const [toggleStyle, setToggleStyle] = useState<"border-red" | "">("");
+  const [toggleStyle, setToggleStyle] = useState<
+    "border-red" | "border-lightGray dark:border-darkBlue"
+  >("border-lightGray dark:border-darkBlue");
   const { setItem, updateAllItems } = useSessionStorage();
   const allFieldAlert = useRef<HTMLParagraphElement>();
   const itemAlert = useRef<HTMLParagraphElement>();
@@ -77,7 +79,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
   };
 
   const removeStyle = () => {
-    setToggleStyle("");
+    setToggleStyle("border-lightGray dark:border-darkBlue");
   };
 
   const showSpan = (elem: HTMLInputElement) => {
@@ -93,11 +95,14 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
     elem.previousElementSibling.classList.add("hidden");
 
     elem.classList.remove("border-red");
-    elem.classList.add("border-lightGray");
-    elem.classList.add("dark:border-darkBlue");
 
     allFieldAlert.current.classList.remove("visible");
     allFieldAlert.current.classList.add("invisible");
+  };
+
+  const handleFocus = (elem: HTMLInputElement) => {
+    elem.classList.remove("border-lightGray");
+    elem.classList.remove("dark:border-darkBlue");
   };
 
   const checkIfEveryInputIsValid = () => {
@@ -290,6 +295,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               maxLength={30}
               className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
 
@@ -306,6 +313,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                 maxLength={20}
                 className="custom-input border-lightGray dark:border-darkBlue"
                 onChange={(e) => hideSpan(e.target)}
+                onFocus={(e) => handleFocus(e.target)}
+                onBlur={() => refreshBorder()}
               />
             </div>
             <div className="flex flex-wrap items-center justify-between mt-5">
@@ -320,6 +329,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                 maxLength={10}
                 className="custom-input border-lightGray dark:border-darkBlue"
                 onChange={(e) => hideSpan(e.target)}
+                onFocus={(e) => handleFocus(e.target)}
+                onBlur={() => refreshBorder()}
               />
             </div>
           </div>
@@ -336,6 +347,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               maxLength={20}
               className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
         </fieldset>
@@ -355,6 +368,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               maxLength={20}
               className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
 
@@ -372,6 +387,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               maxLength={35}
               className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
 
@@ -387,6 +404,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               maxLength={25}
               className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
 
@@ -403,6 +422,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                 maxLength={20}
                 className="custom-input border-lightGray dark:border-darkBlue"
                 onChange={(e) => hideSpan(e.target)}
+                onFocus={(e) => handleFocus(e.target)}
+                onBlur={() => refreshBorder()}
               />
             </div>
             <div className="flex basis-1/2 flex-wrap items-center justify-between mt-5">
@@ -417,6 +438,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                 maxLength={10}
                 className="custom-input border-lightGray dark:border-darkBlue"
                 onChange={(e) => hideSpan(e.target)}
+                onFocus={(e) => handleFocus(e.target)}
+                onBlur={() => refreshBorder()}
               />
             </div>
           </div>
@@ -433,6 +456,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               maxLength={20}
               className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
 
@@ -448,6 +473,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               defaultValue={windowInvoice?.createdAt}
               className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
 
@@ -469,6 +496,8 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
               defaultValue={windowInvoice?.description}
               className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
         </fieldset>
@@ -493,13 +522,15 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                   defaultValue={item.name}
                   className="custom-input border-lightGray dark:border-darkBlue"
                   onChange={(e) => hideSpan(e.target)}
+                  onFocus={(e) => handleFocus(e.target)}
+                  onBlur={() => refreshBorder()}
                 />
               </div>
 
               <div className="grid grid-cols-6 gap-x-2 mt-5">
                 <div>
                   <label
-                    className="block mb-1 text-fadedPurple text-sm"
+                    className="input-label"
                     htmlFor={`quantity-${index + 1}`}
                   >
                     Qty.
@@ -510,14 +541,13 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                     defaultValue={item.quantity}
                     className="custom-input border-lightGray dark:border-darkBlue"
                     onChange={(e) => handleQtyChange(e.target.value, index)}
+                    onFocus={(e) => handleFocus(e.target)}
+                    onBlur={() => refreshBorder()}
                   />
                 </div>
 
                 <div className="col-span-2">
-                  <label
-                    className="block mb-1 text-fadedPurple text-sm"
-                    htmlFor={`price-${index + 1}`}
-                  >
+                  <label className="input-label" htmlFor={`price-${index + 1}`}>
                     Price
                   </label>
                   <input
@@ -526,11 +556,13 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
                     defaultValue={item.price}
                     className="custom-input border-lightGray dark:border-darkBlue"
                     onChange={(e) => handlePriceChange(e.target.value, index)}
+                    onFocus={(e) => handleFocus(e.target)}
+                    onBlur={() => refreshBorder()}
                   />
                 </div>
 
                 <div className="col-span-2">
-                  <p className="mb-1 text-fadedPurple text-sm">Total</p>
+                  <p className="input-label">Total</p>
                   <div className="flex items-center h-10 text-darkerGray font-bold text-[15px]">
                     {item.total.toFixed(2)}
                   </div>

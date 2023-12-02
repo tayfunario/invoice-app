@@ -41,10 +41,7 @@ function Toggle({
   return (
     <div id="input-wrapper" className="relative">
       <div className="flex justify-between items-end mt-5">
-        <label
-          id="payment-terms-label"
-          className="block text-fadedPurple text-sm"
-        >
+        <label id="payment-terms-label" className="input-label">
           Payment Terms
         </label>
         {style === "border-red" && (
@@ -52,7 +49,7 @@ function Toggle({
         )}
       </div>
       <button
-        className={`flex justify-between items-center w-full h-10 font-bold px-3 rounded-md border ${style} ${
+        className={`flex justify-between items-center w-full h-10 dark:text-white dark:bg-dark font-bold px-3 rounded-md border ${style} ${
           show && "border-customPurple"
         } hover:border-customPurple`}
         onClick={() => setShow(!show)}
@@ -62,7 +59,7 @@ function Toggle({
       </button>
 
       {show && (
-        <div className="absolute top-[70px] w-full divide-y-2 bg-white custom-shadow-2 rounded-md">
+        <div className="absolute top-[70px] w-full divide-y-2 dark:divide-black bg-lightBG dark:text-lightGray dark:bg-darkBlue dark:shadow-none custom-shadow-2 rounded-md">
           <button
             className="block w-full pl-5 py-[10px] text-start font-bold hover:text-customPurple"
             onClick={() => handleChosen(1)}
