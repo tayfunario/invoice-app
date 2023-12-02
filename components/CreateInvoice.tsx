@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Header from "./Header";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Toggle from "./Toggle";
 import { ItemArrayProps } from "./Edit";
 import { MdDelete } from "react-icons/md";
@@ -24,6 +24,11 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
   const allFieldAlert = useRef<HTMLParagraphElement>();
   const itemAlert = useRef<HTMLParagraphElement>();
   const { addNewItemToSS } = useSessionStorage();
+
+  useEffect(() => {
+    refreshBorder();
+    setInputs(document.getElementsByTagName("input"));
+  }, [items]);
 
   const hideSpan = (elem: HTMLInputElement) => {
     elem.previousElementSibling.classList.remove("block");
@@ -522,6 +527,8 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
                     defaultValue={item.quantity}
                     className="custom-input border-lightGray dark:border-darkBlue"
                     onChange={(e) => handleQtyChange(e.target.value, index)}
+                    onFocus={(e) => handleFocus(e.target)}
+                    onBlur={() => refreshBorder()}
                   />
                 </div>
 
@@ -538,6 +545,8 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
                     defaultValue={item.price}
                     className="custom-input border-lightGray dark:border-darkBlue"
                     onChange={(e) => handlePriceChange(e.target.value, index)}
+                    onFocus={(e) => handleFocus(e.target)}
+                    onBlur={() => refreshBorder()}
                   />
                 </div>
 
