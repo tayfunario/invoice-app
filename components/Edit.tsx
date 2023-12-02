@@ -275,7 +275,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
         className="mt-5 mx-5 pb-32"
         onSubmit={(e) => e.preventDefault()}
       >
-        <h2 className="font-bold text-2xl dark:text-white">
+        <h2 className="font-bold text-2xl dark:text-white tracking-tight">
           Edit <span className="text-darkerGray">#</span>
           {windowInvoice?.id}
         </h2>
