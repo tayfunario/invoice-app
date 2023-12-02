@@ -172,7 +172,7 @@ export default function Index() {
           Edit
         </button>
         <button
-          className="px-5 py-3 mx-1 bg-red text-white text-sm font-semibold rounded-3xl"
+          className="button-5"
           onClick={() => handleDeletion(true)}
         >
           Delete
@@ -186,7 +186,7 @@ export default function Index() {
             windowInvoice?.status === "paid" ||
             windowInvoice?.status === "draft"
               ? "bg-gray-500"
-              : "bg-customPurple"
+              : "bg-customPurple hover:bg-customPurple2"
           } text-white text-sm font-semibold rounded-3xl`}
           onClick={() => handlePaidButton()}
         >
