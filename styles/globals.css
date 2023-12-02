@@ -5,35 +5,39 @@
 @tailwind utilities;
 
 * {
-  @apply font-spartan;
+  @apply font-spartan transition-all;
 }
 
 .button-1 {
-  @apply flex items-center gap-x-2 my-[2px] pl-1 pr-3 text-white text-sm font-bold bg-customPurple rounded-3xl;
+  @apply flex items-center gap-x-2 my-[2px] pl-1 pr-3 text-white text-sm font-bold bg-customPurple hover:bg-customPurple2 rounded-3xl;
 }
 
 .button-2 {
-  @apply text-sm font-semibold rounded-3xl bg-customPurple text-white py-[14px] px-4 tracking-tight;
+  @apply text-sm font-semibold rounded-3xl bg-customPurple hover:bg-customPurple2 text-white py-[14px] px-4 tracking-tight;
 }
 
 .button-3 {
-  @apply text-sm font-semibold rounded-3xl bg-lightBG text-fadedPurple py-[14px] px-4 tracking-tight;
+  @apply text-sm font-semibold rounded-3xl bg-lightBG text-fadedPurple dark:bg-darkBlue  dark:text-lightGray hover:bg-lightGray hover:dark:text-lightGray hover:dark:bg-white py-[14px] px-5 tracking-tight;
 }
 
 .button-4 {
-  @apply text-sm font-semibold bg-[#373B53] text-darkerGray py-[14px] px-4 rounded-3xl tracking-tight;
+  @apply text-sm font-semibold bg-[#373B53] text-darkerGray hover:bg-black1 dark:text-lightGray dark:hover:bg-dark py-[14px] px-4 rounded-3xl tracking-tight;
 }
 
 .button-5 {
-  @apply px-5 py-3 mx-1 bg-red text-white text-sm font-semibold rounded-3xl;
+  @apply px-5 py-3 mx-1 bg-red text-white hover:bg-fadedRed text-sm font-semibold rounded-3xl;
 }
 
 .button-6 {
-  @apply flex justify-center items-center gap-x-2 w-full mt-10 text-[15px] font-bold rounded-3xl bg-lightBG text-fadedPurple py-[14px] px-4 tracking-tight;
+  @apply flex justify-center items-center gap-x-2 w-full mt-10 text-[15px] font-bold rounded-3xl bg-lightBG text-fadedPurple hover:bg-lightGray dark:bg-darkBlue dark:text-darkerGray dark:hover:bg-dark py-[14px] px-4 tracking-tight;
+}
+
+.input-label {
+  @apply block text-fadedPurple dark:text-darkerGray text-sm;
 }
 
 .custom-input {
-  @apply w-full basis-full h-10 font-bold text-[15px] px-3 rounded-md border focus:outline-none focus:border-customPurple;
+  @apply w-full basis-full h-10 font-bold text-[15px] px-3 rounded-md border dark:text-white dark:bg-dark outline-transparent focus:outline-none focus:border-customPurple;
 }
 
 .custom-shadow {
@@ -52,4 +56,8 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .remove-item-btn:hover .remove-icon {
   @apply text-red;
+}
+
+.dark::-webkit-calendar-picker-indicator {
+  filter: invert(0);
 }

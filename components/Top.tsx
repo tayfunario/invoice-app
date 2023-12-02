@@ -43,12 +43,12 @@ function Top({ invNum, handleCreate, handleFilter }: TopProps) {
   }, []);
 
   return (
-    <section className="flex justify-between mx-auto px-6 text-black">
+    <section className="flex justify-between mx-auto px-6 text-black dark:text-white">
       <div>
         <h1 className="text-2xl font-bold leading-5 tracking-tighter">
           Invoices
         </h1>
-        <span className="text-sm text-gray-500">
+        <span className="text-sm text-gray-500 dark:text-lightGray">
           {invNum ? invNum : "No"} invoices
         </span>
       </div>
@@ -113,6 +113,7 @@ function Top({ invNum, handleCreate, handleFilter }: TopProps) {
             </li>
           </motion.ul>
         </div>
+        
         <button className="button-1" onClick={() => handleCreate(true)}>
           <img
             src="icon-plus.svg"

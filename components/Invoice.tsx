@@ -21,32 +21,41 @@ function Invoice({ invoice, setItem }: InvoiceObjProps) {
   } = {
     pending: "bg-orange-100 text-orange-500",
     paid: "bg-green-100 text-green-500",
-    draft: "bg-gray-100 text-gray-500",
+    draft: "bg-gray-100 text-gray-500 dark:text-lightGray",
   };
 
   return (
     <Link
       href={"/invoice"}
       onClick={() => setItem(invoice)}
-      className="mx-auto my-4 flex flex-col justify-between w-80 h-36 py-6 px-5 bg-white rounded-md"
+      className="mx-auto my-4 flex flex-col justify-between w-80 h-36 py-6 px-5 bg-white dark:bg-dark rounded-md"
     >
       <div className="flex justify-between">
         <span className="text-fadedPurple">
-          #<span className="text-black font-bold">{invoice.id}</span>
+          #
+          <span className="text-black dark:text-white font-bold">
+            {invoice.id}
+          </span>
         </span>
-        <span className="text-gray-500 text-sm">{invoice.clientName}</span>
+        <span className="text-gray-500 dark:text-white text-sm">
+          {invoice.clientName}
+        </span>
       </div>
       <div className="flex justify-between">
         <div>
           {formattedDate !== "Invalid Date" && (
-            <p className="text-sm text-fadedPurple mb-1">Due {formattedDate}</p>
+            <p className="text-sm text-fadedPurple dark:text-lightGray mb-1">
+              Due {formattedDate}
+            </p>
           )}
-          <span className="font-bold">£ {invoice.total}</span>
+          <span className="text-black1 dark:text-white font-bold">
+            £ {invoice.total.toLocaleString("en-US")}
+          </span>
         </div>
         <div
           className={`flex justify-center items-center w-24 h-10 gap-x-1 font-semibold capitalize ${
             colors[invoice.status]
-          } rounded-md`}
+          } rounded-md dark:bg-transparent`}
         >
           <span className="text-xl">•</span> {invoice.status}
         </div>

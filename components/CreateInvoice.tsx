@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Header from "./Header";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Toggle from "./Toggle";
 import { ItemArrayProps } from "./Edit";
 import { MdDelete } from "react-icons/md";
@@ -18,10 +18,17 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
   const [inputs, setInputs] = useState<HTMLCollectionOf<HTMLInputElement>>(
     document.getElementsByTagName("input")
   );
-  const [toggleStyle, setToggleStyle] = useState<"border-red" | "">("");
+  const [toggleStyle, setToggleStyle] = useState<
+    "border-red" | "border-lightGray dark:border-darkBlue"
+  >("border-lightGray dark:border-darkBlue");
   const allFieldAlert = useRef<HTMLParagraphElement>();
   const itemAlert = useRef<HTMLParagraphElement>();
   const { addNewItemToSS } = useSessionStorage();
+
+  useEffect(() => {
+    refreshBorder();
+    setInputs(document.getElementsByTagName("input"));
+  }, [items]);
 
   const hideSpan = (elem: HTMLInputElement) => {
     elem.previousElementSibling.classList.remove("block");
@@ -61,7 +68,15 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
   };
 
   const removeStyle = () => {
-    setToggleStyle("");
+    setToggleStyle("border-lightGray dark:border-darkBlue");
+  };
+
+  const refreshBorder = () => {
+    for (let input of inputs) {
+      input.classList.remove("border-red");
+      input.classList.add("border-lightGray");
+      input.classList.add("dark:border-darkBlue");
+    }
   };
 
   const createID = (): string => {
@@ -167,6 +182,11 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
     handleCreate(false);
   };
 
+  const handleFocus = (elem: HTMLInputElement) => {
+    elem.classList.remove("border-lightGray");
+    elem.classList.remove("dark:border-darkBlue");
+  };
+
   const showSpan = (elem: HTMLInputElement) => {
     elem.previousElementSibling.classList.remove("hidden");
     elem.previousElementSibling.classList.add("block");
@@ -182,6 +202,8 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
         case "text":
           const val = input.value.trim();
           if (val.length === 0) {
+            input.classList.remove("border-lightGray");
+            input.classList.remove("dark:border-darkBlue");
             input.classList.add("border-red");
             showSpan(input);
             save = false;
@@ -191,6 +213,8 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
         case "email":
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           if (!emailRegex.test(input.value)) {
+            input.classList.remove("border-lightGray");
+            input.classList.remove("dark:border-darkBlue");
             input.classList.add("border-red");
             showSpan(input);
             save = false;
@@ -199,6 +223,8 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
           break;
         case "number":
           if (Number(input.value) <= 0) {
+            input.classList.remove("border-lightGray");
+            input.classList.remove("dark:border-darkBlue");
             input.classList.add("border-red");
             save = false;
             break outerLoop;
@@ -206,6 +232,8 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
           break;
         case "date":
           if (input.value.length === 0) {
+            input.classList.remove("border-lightGray");
+            input.classList.remove("dark:border-darkBlue");
             input.classList.add("border-red");
             showSpan(input);
             save = false;
@@ -226,12 +254,12 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
   };
 
   return (
-    <div className="w-full h-screen">
+    <div className="w-full dark:bg-black2">
       <Header />
 
       <Link
         href="/"
-        className="flex justify-start items-baseline gap-x-4 mt-8 font-bold px-6"
+        className="flex justify-start items-baseline gap-x-4 dark:text-white font-bold mt-10 px-6"
         onClick={() => handleCreate(false)}
       >
         <Image
@@ -248,13 +276,15 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
         className="mt-5 mx-5 pb-32"
         onSubmit={(e) => e.preventDefault()}
       >
-        <h2 className="font-bold text-2xl tracking-tight">New Invoice</h2>
+        <h2 className="font-bold text-2xl dark:text-white tracking-tight">
+          New Invoice
+        </h2>
 
         <fieldset className="mt-5">
           <legend className="font-bold text-customPurple">Bill From</legend>
 
           <div className="flex flex-wrap items-center justify-between mt-5">
-            <label className="block text-fadedPurple text-sm" htmlFor="street">
+            <label className="input-label" htmlFor="street">
               Street Address
             </label>
             <span className="hidden text-red text-xs">can't be empty</span>
@@ -262,14 +292,16 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
               id="street"
               type="text"
               maxLength={30}
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
 
           <div className="flex gap-x-4">
             <div className="flex basis-1/2 flex-wrap items-center justify-between mt-5">
-              <label className="block text-fadedPurple text-sm" htmlFor="city">
+              <label className="input-label" htmlFor="city">
                 City
               </label>
               <span className="hidden text-red text-xs">can't be empty</span>
@@ -277,15 +309,14 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
                 id="city"
                 type="text"
                 maxLength={20}
-                className="custom-input"
+                className="custom-input border-lightGray dark:border-darkBlue"
                 onChange={(e) => hideSpan(e.target)}
+                onFocus={(e) => handleFocus(e.target)}
+                onBlur={() => refreshBorder()}
               />
             </div>
             <div className="flex basis-1/2 flex-wrap items-center justify-between mt-5">
-              <label
-                className="block text-fadedPurple text-sm"
-                htmlFor="post-code"
-              >
+              <label className="input-label" htmlFor="post-code">
                 Post Code
               </label>
               <span className="hidden text-red text-xs">can't be empty</span>
@@ -293,14 +324,16 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
                 id="post-code"
                 type="text"
                 maxLength={10}
-                className="custom-input"
+                className="custom-input border-lightGray dark:border-darkBlue"
                 onChange={(e) => hideSpan(e.target)}
+                onFocus={(e) => handleFocus(e.target)}
+                onBlur={() => refreshBorder()}
               />
             </div>
           </div>
 
           <div className="flex flex-wrap items-center justify-between mt-5">
-            <label className="block text-fadedPurple text-sm" htmlFor="country">
+            <label className="input-label" htmlFor="country">
               Country
             </label>
             <span className="hidden text-red text-xs">can't be empty</span>
@@ -308,8 +341,10 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
               id="country"
               type="text"
               maxLength={20}
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
         </fieldset>
@@ -318,10 +353,7 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
           <legend className="font-bold text-customPurple">Bill To</legend>
 
           <div className="flex flex-wrap items-center justify-between mt-5">
-            <label
-              className="block text-fadedPurple text-sm"
-              htmlFor="client-name"
-            >
+            <label className="input-label" htmlFor="client-name">
               Client's Name
             </label>
             <span className="hidden text-red text-xs">can't be empty</span>
@@ -329,16 +361,15 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
               id="client-name"
               type="text"
               maxLength={20}
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
 
           <div className="flex flex-wrap items-center justify-between mt-5">
-            <label
-              className="block text-fadedPurple text-sm"
-              htmlFor="client-email"
-            >
+            <label className="input-label" htmlFor="client-email">
               Client's Email
             </label>
             <span className="hidden text-red text-xs">
@@ -348,16 +379,15 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
               id="client-email"
               type="email"
               maxLength={35}
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
 
           <div className="flex flex-wrap items-center justify-between mt-5">
-            <label
-              className="block text-fadedPurple text-sm"
-              htmlFor="tostreet"
-            >
+            <label className="input-label" htmlFor="tostreet">
               Street Address
             </label>
             <span className="hidden text-red text-xs">can't be empty</span>
@@ -365,17 +395,16 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
               id="tostreet"
               type="text"
               maxLength={25}
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
 
           <div className="flex gap-x-4">
             <div className="flex basis-1/2 flex-wrap items-center justify-between mt-5">
-              <label
-                className="block text-fadedPurple text-sm"
-                htmlFor="tocity"
-              >
+              <label className="input-label" htmlFor="tocity">
                 City
               </label>
               <span className="hidden text-red text-xs">can't be empty</span>
@@ -383,15 +412,14 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
                 id="tocity"
                 type="text"
                 maxLength={20}
-                className="custom-input"
+                className="custom-input border-lightGray dark:border-darkBlue"
                 onChange={(e) => hideSpan(e.target)}
+                onFocus={(e) => handleFocus(e.target)}
+                onBlur={() => refreshBorder()}
               />
             </div>
             <div className="flex basis-1/2 flex-wrap items-center justify-between mt-5">
-              <label
-                className="block text-fadedPurple text-sm"
-                htmlFor="topost-code"
-              >
+              <label className="input-label" htmlFor="topost-code">
                 Post Code
               </label>
               <span className="hidden text-red text-xs">can't be empty</span>
@@ -399,17 +427,16 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
                 id="topost-code"
                 type="text"
                 maxLength={10}
-                className="custom-input"
+                className="custom-input border-lightGray dark:border-darkBlue"
                 onChange={(e) => hideSpan(e.target)}
+                onFocus={(e) => handleFocus(e.target)}
+                onBlur={() => refreshBorder()}
               />
             </div>
           </div>
 
           <div className="flex flex-wrap items-center justify-between mt-5">
-            <label
-              className="block text-fadedPurple text-sm"
-              htmlFor="tocountry"
-            >
+            <label className="input-label" htmlFor="tocountry">
               Country
             </label>
             <span className="hidden text-red text-xs">can't be empty</span>
@@ -417,21 +444,25 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
               id="tocountry"
               type="text"
               maxLength={20}
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
 
           <div className="flex flex-wrap items-center justify-between mt-10">
-            <label className="block text-fadedPurple text-sm" htmlFor="date">
+            <label className="input-label" htmlFor="date">
               Invoice Date
             </label>
             <span className="hidden text-red text-xs">can't be empty</span>
             <input
               type="date"
               id="date"
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
 
@@ -443,18 +474,17 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
           />
 
           <div className="flex flex-wrap items-center justify-between mt-5">
-            <label
-              className="block text-fadedPurple text-sm"
-              htmlFor="description"
-            >
+            <label className="input-label" htmlFor="description">
               Project Description
             </label>
             <span className="hidden text-red text-xs">can't be empty</span>
             <input
               id="description"
               type="text"
-              className="custom-input"
+              className="custom-input border-lightGray dark:border-darkBlue"
               onChange={(e) => hideSpan(e.target)}
+              onFocus={(e) => handleFocus(e.target)}
+              onBlur={() => refreshBorder()}
             />
           </div>
         </fieldset>
@@ -476,8 +506,10 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
                 <input
                   id={`item-${index + 1}`}
                   type="text"
-                  className="custom-input"
+                  className="custom-input border-lightGray dark:border-darkBlue"
                   onChange={(e) => hideSpan(e.target)}
+                  onFocus={(e) => handleFocus(e.target)}
+                  onBlur={() => refreshBorder()}
                 />
               </div>
 
@@ -493,8 +525,10 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
                     type="number"
                     id={`quantity-${index + 1}`}
                     defaultValue={item.quantity}
-                    className="custom-input"
+                    className="custom-input border-lightGray dark:border-darkBlue"
                     onChange={(e) => handleQtyChange(e.target.value, index)}
+                    onFocus={(e) => handleFocus(e.target)}
+                    onBlur={() => refreshBorder()}
                   />
                 </div>
 
@@ -509,8 +543,10 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
                     type="number"
                     id={`price-${index + 1}`}
                     defaultValue={item.price}
-                    className="custom-input"
+                    className="custom-input border-lightGray dark:border-darkBlue"
                     onChange={(e) => handlePriceChange(e.target.value, index)}
+                    onFocus={(e) => handleFocus(e.target)}
+                    onBlur={() => refreshBorder()}
                   />
                 </div>
 
@@ -550,7 +586,7 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
         </fieldset>
       </form>
 
-      <div className="fixed bottom-0 flex justify-center items-center gap-x-2 w-full h-20 px-5 custom-shadow bg-white">
+      <div className="fixed bottom-0 flex justify-center items-center gap-x-2 w-full h-20 px-5 custom-shadow bg-white dark:bg-dark dark:shadow-none">
         <button className="button-3" onClick={() => handleCreate(false)}>
           Discard
         </button>
