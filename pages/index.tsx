@@ -38,23 +38,27 @@ export interface InvoiceProps {
 
 export default function Home() {
   const [create, setCreate] = useState<boolean>(false);
-  const { setItem, setAllItems, getAllItems } = useSessionStorage();
+  const [filter, setFilter] = useState<"total" | "paid" | "pending" | "draft">(
+    "total"
+  );
   const [filteredInvoices, setFilteredInvoices] = useState<InvoiceProps[]>();
+  const { setItem, setAllItems, getAllItems } = useSessionStorage();
 
   useEffect(() => {
     setAllItems();
   }, []);
 
   useEffect(() => {
-    setFilteredInvoices(getAllItems());
+    // setFilteredInvoices(getAllItems());
   }, [create]);
 
   const handleCreate = (val: boolean) => {
     setCreate(val);
   };
 
-  const handleFilter = (val: "all" | "paid" | "pending" | "draft") => {
-    if (val === "all") {
+  const handleFilter = (val: "total" | "paid" | "pending" | "draft") => {
+    setFilter(val);
+    if (val === "total") {
       setFilteredInvoices(getAllItems());
     } else {
       setFilteredInvoices(
@@ -70,6 +74,7 @@ export default function Home() {
       <Top
         invNum={filteredInvoices?.length}
         handleCreate={handleCreate}
+        filter={filter}
         handleFilter={handleFilter}
       />
 

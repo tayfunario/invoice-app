@@ -26,10 +26,11 @@ const ulVariants = {
 interface TopProps {
   invNum: number;
   handleCreate: (val: boolean) => void;
-  handleFilter: (val: "paid" | "pending" | "all" | "draft") => void;
+  filter: string;
+  handleFilter: (val: "paid" | "pending" | "total" | "draft") => void;
 }
 
-function Top({ invNum, handleCreate, handleFilter }: TopProps) {
+function Top({ invNum, handleCreate, filter, handleFilter }: TopProps) {
   const { windowSize } = useWindowSize();
   const [open, setOpen] = useState<boolean>(false);
 
@@ -45,14 +46,14 @@ function Top({ invNum, handleCreate, handleFilter }: TopProps) {
   }, []);
 
   return (
-    <section className="flex justify-between mx-auto sm:px-8 px-6 text-black dark:text-white">
+    <section className="flex justify-between mx-auto text-black dark:text-white">
       <div>
         <h1 className="sm:text-4xl text-2xl font-bold leading-5 tracking-tighter">
           Invoices
         </h1>
         <span className="text-sm text-gray-500 dark:text-lightGray">
           {windowSize.width > 640 ? (
-            <>There are {invNum ? invNum : "no"} invoices</>
+            <>There are {invNum ? `${invNum} ${filter}` : "no"} invoices</>
           ) : (
             <>{invNum ? invNum : "No"} invoices</>
           )}
@@ -78,7 +79,7 @@ function Top({ invNum, handleCreate, handleFilter }: TopProps) {
               <button
                 className="ul-btn w-full mb-1 px-1 text-start rounded-md bg-sky-100 hover:bg-sky-200 text-sky-700"
                 onClick={() => {
-                  handleFilter("all");
+                  handleFilter("total");
                   setOpen(false);
                 }}
               >
