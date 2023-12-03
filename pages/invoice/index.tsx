@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import { useSessionStorage } from "../../components/useSessionStorage";
-import Layout from "../../components/Layout";
 import Image from "next/image";
 import { InvoiceProps } from "../index";
 import Link from "next/link";
@@ -49,6 +48,7 @@ export default function Index() {
 
   return windowSize.width > 768 ? (
     <>
+      {edit && <Edit handleEdit={handleEdit} windowInvoice={windowInvoice} />}
       <Header />
       <div className="py-10 xl:px-64 lg:px-36 md:px-12 sm:px-8 px-6 bg-lightBG dark:bg-black2">
         {deletion && (
