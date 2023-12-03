@@ -49,7 +49,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    // setFilteredInvoices(getAllItems());
+    setFilteredInvoices(getAllItems());
   }, [create]);
 
   const handleCreate = (val: boolean) => {
