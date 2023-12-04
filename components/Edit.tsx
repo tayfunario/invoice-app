@@ -267,7 +267,7 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
   return windowSize.width > 768 ? (
     <div
       id="background-cover"
-      className="fixed bg-black bg-opacity-40 w-full h-screen z-20"
+      className="fixed bg-black bg-opacity-40 w-full h-screen z-50"
     >
       <div className="w-[40rem] bg-white dark:bg-black2 h-screen overflow-scroll">
         <button

@@ -3,6 +3,7 @@ import Invoice from "../components/Invoice";
 import Top from "../components/Top";
 import Blank from "../components/Blank";
 import { useSessionStorage } from "../components/useSessionStorage";
+import { useWindowSize } from "../components/useWindowSize";
 import Layout from "../components/Layout";
 import CreateInvoice from "../components/CreateInvoice";
 
@@ -43,6 +44,7 @@ export default function Home() {
   );
   const [filteredInvoices, setFilteredInvoices] = useState<InvoiceProps[]>();
   const { setItem, setAllItems, getAllItems } = useSessionStorage();
+  const { windowSize } = useWindowSize();
 
   useEffect(() => {
     setAllItems();
@@ -67,7 +69,35 @@ export default function Home() {
     }
   };
 
-  return create ? (
+  return windowSize.width > 768 ? (
+    <>
+      {create && <CreateInvoice handleCreate={handleCreate} />}
+      <Layout>
+        <Top
+          invNum={filteredInvoices?.length}
+          handleCreate={handleCreate}
+          filter={filter}
+          handleFilter={handleFilter}
+        />
+
+        <main>
+          <section>
+            {filteredInvoices?.length ? (
+              <ul className="pt-4 pb-10">
+                {filteredInvoices?.map((invoice) => (
+                  <li key={invoice.id}>
+                    <Invoice invoice={invoice} setItem={setItem} />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Blank />
+            )}
+          </section>
+        </main>
+      </Layout>
+    </>
+  ) : create ? (
     <CreateInvoice handleCreate={handleCreate} />
   ) : (
     <Layout>

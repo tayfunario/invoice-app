@@ -267,7 +267,7 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
   return windowSize.width > 768 ? (
     <div
       id="background-cover"
-      className="fixed bg-black bg-opacity-40 w-full h-screen z-20"
+      className="fixed bg-black bg-opacity-40 w-full h-screen z-50"
     >
       <div className="w-[40rem] bg-white dark:bg-black2 h-screen overflow-scroll">
         <button
@@ -586,21 +586,27 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
           </fieldset>
         </form>
 
-        <div className="fixed bottom-0 flex justify-end items-center gap-x-2 w-[40rem] h-20 px-5 custom-shadow dark:shadow-none bg-white dark:bg-dark">
+        <div className="fixed bottom-0 flex justify-between items-center gap-x-2 w-[40rem] h-20 px-5 custom-shadow dark:shadow-none bg-white dark:bg-dark">
           <button className="button-3" onClick={() => handleCreate(false)}>
-            Cancel
+            Discard
           </button>
-          <button
-            className="button-2"
-            onClick={() => checkIfEveryInputIsValid()}
-          >
-            Save Changes
-          </button>
+
+          <div className="flex gap-x-2">
+            <button className="button-4" onClick={() => handleDraftOrSave("draft")}>
+              Save as Draft
+            </button>
+            <button
+              className="button-2"
+              onClick={() => checkIfEveryInputIsValid()}
+            >
+              Save Changes
+            </button>
+          </div>
         </div>
       </div>
     </div>
   ) : (
-    <div className="w-full dark:bg-black2">
+    <div className="dark:bg-black2">
       <Header />
 
       <Link

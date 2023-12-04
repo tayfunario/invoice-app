@@ -64,14 +64,14 @@ function Top({ invNum, handleCreate, filter, handleFilter }: TopProps) {
         <div className="flex items-center px-2 font-bold rounded-2xl">
           <button
             id="toggle-control"
-            className="flex items-center gap-x-2"
+            className="flex items-center gap-x-2 z-20"
             onClick={() => setOpen(!open)}
           >
             {windowSize.width > 640 ? "Filter by status" : "Filter"}
             <img src="icon-arrow-down.svg" />
           </button>
           <motion.ul
-            className="absolute sm:top-12 top-10 origin-top sm:right-36 right-20 w-24 p-1 text-md font-normal bg-white shadow-md"
+            className="absolute sm:top-12 top-10 origin-top sm:right-36 right-20 w-24 p-1 text-md font-normal bg-white shadow-md z-50"
             variants={ulVariants}
             animate={open ? "open" : "closed"}
           >

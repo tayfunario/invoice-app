@@ -30,7 +30,7 @@ function Invoice({ invoice, setItem }: InvoiceObjProps) {
     <Link
       href={"/invoice"}
       onClick={() => setItem(invoice)}
-      className="flex justify-around items-center mx-auto my-4 h-20 py-6 px-5 border border-transparent hover:border-customPurple bg-white dark:bg-dark rounded-md"
+      className="relative grid grid-cols-5 items-center mx-auto my-4 h-20 py-6 px-5 border border-transparent hover:border-customPurple bg-white dark:bg-dark rounded-md"
     >
       <span className="text-fadedPurple">
         #
@@ -60,6 +60,8 @@ function Invoice({ invoice, setItem }: InvoiceObjProps) {
       >
         <span className="text-xl">•</span> {invoice.status}
       </div>
+
+      <img src="/icon-arrow-right.svg" className="absolute right-5" alt="arrow" />
     </Link>
   ) : (
     <Link
