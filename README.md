@@ -1,27 +1,40 @@
-# Next.js + Cypress
+# Invoice app solution
 
-This example shows how to configure Cypress to work with Next.js.
+## Overview
 
-## Deploy your own
+### The challenge
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-cypress)
+Users should be able to:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-cypress&project-name=with-cypress&repository-name=with-cypress)
+- View the optimal layout for the app depending on their device's screen size
+- See hover states for all interactive elements on the page
+- Create, read, update, and delete invoices
+- Receive form validations when trying to create/edit an invoice
+- Save draft invoices, and mark pending invoices as paid
+- Filter invoices by status (draft/pending/paid)
+- Toggle light and dark mode
 
-## How to use
+### Screenshot
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+### Built with
 
-```bash
-npx create-next-app --example with-cypress with-cypress-app
-```
+- Next.js
+- Typescript
+- Tailwind CSS
+- CSS Flexbox, Grid
+- CSS Custom styles
+- Semantic HTML
+- Mobile-first workflow
+- Framer-motion
+- Cypress (for testing)
 
-```bash
-yarn create next-app --example with-cypress with-cypress-app
-```
+### What I learned
 
-```bash
-pnpm create next-app --example with-cypress with-cypress-app
-```
+Importance of reusable components and styles.
+Usage of React custom hooks.
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+
+### Continued development
+
+I will always plan the code structure in advance.
+I will create reusable stuff as often as i can
