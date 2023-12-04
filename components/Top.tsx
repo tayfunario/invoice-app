@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useWindowSize } from "./useWindowSize";
 
 const ulVariants = {
   open: {
@@ -25,10 +26,12 @@ const ulVariants = {
 interface TopProps {
   invNum: number;
   handleCreate: (val: boolean) => void;
-  handleFilter: (val: "paid" | "pending" | "all" | "draft") => void;
+  filter: string;
+  handleFilter: (val: "paid" | "pending" | "total" | "draft") => void;
 }
 
-function Top({ invNum, handleCreate, handleFilter }: TopProps) {
+function Top({ invNum, handleCreate, filter, handleFilter }: TopProps) {
+  const { windowSize } = useWindowSize();
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -43,27 +46,32 @@ function Top({ invNum, handleCreate, handleFilter }: TopProps) {
   }, []);
 
   return (
-    <section className="flex justify-between mx-auto px-6 text-black dark:text-white">
+    <section className="flex justify-between mx-auto text-black dark:text-white">
       <div>
-        <h1 className="text-2xl font-bold leading-5 tracking-tighter">
+        <h1 className="sm:text-4xl text-2xl font-bold leading-5 tracking-tighter">
           Invoices
         </h1>
         <span className="text-sm text-gray-500 dark:text-lightGray">
-          {invNum ? invNum : "No"} invoices
+          {windowSize.width > 640 ? (
+            <>There are {invNum ? `${invNum} ${filter}` : "no"} invoices</>
+          ) : (
+            <>{invNum ? invNum : "No"} invoices</>
+          )}
         </span>
       </div>
 
-      <div className="relative flex gap-x-4">
+      <div className="relative flex items-center gap-x-4">
         <div className="flex items-center px-2 font-bold rounded-2xl">
           <button
             id="toggle-control"
-            className="flex items-center gap-x-2"
+            className="flex items-center gap-x-2 z-20"
             onClick={() => setOpen(!open)}
           >
-            Filter <img src="icon-arrow-down.svg" />
+            {windowSize.width > 640 ? "Filter by status" : "Filter"}
+            <img src="icon-arrow-down.svg" />
           </button>
           <motion.ul
-            className="absolute top-10 origin-top right-20 w-24 p-1 text-md font-normal bg-white shadow-md"
+            className="absolute sm:top-12 top-10 origin-top sm:right-36 right-20 w-24 p-1 text-md font-normal bg-white shadow-md z-50"
             variants={ulVariants}
             animate={open ? "open" : "closed"}
           >
@@ -71,7 +79,7 @@ function Top({ invNum, handleCreate, handleFilter }: TopProps) {
               <button
                 className="ul-btn w-full mb-1 px-1 text-start rounded-md bg-sky-100 hover:bg-sky-200 text-sky-700"
                 onClick={() => {
-                  handleFilter("all");
+                  handleFilter("total");
                   setOpen(false);
                 }}
               >
@@ -113,13 +121,15 @@ function Top({ invNum, handleCreate, handleFilter }: TopProps) {
             </li>
           </motion.ul>
         </div>
-        
+
         <button className="button-1" onClick={() => handleCreate(true)}>
           <img
             src="icon-plus.svg"
             className="p-[9px] m-0 bg-white rounded-full"
           />{" "}
-          <span className="mt-px">New</span>
+          <span className="mt-px">
+            {windowSize.width > 640 ? "New Invoice" : "New"}
+          </span>
         </button>
       </div>
     </section>

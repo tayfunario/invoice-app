@@ -39,7 +39,7 @@ function Toggle({
   };
 
   return (
-    <div id="input-wrapper" className="relative">
+    <div id="input-wrapper" className="relative md:basis-1/2">
       <div className="flex justify-between items-end mt-5">
         <label id="payment-terms-label" className="input-label">
           Payment Terms
@@ -59,7 +59,7 @@ function Toggle({
       </button>
 
       {show && (
-        <div className="absolute top-[70px] w-full divide-y-2 dark:divide-black bg-lightBG dark:text-lightGray dark:bg-darkBlue dark:shadow-none custom-shadow-2 rounded-md">
+        <div className="absolute md:top-[90px] top-[70px] w-full divide-y-2 dark:divide-black bg-lightBG dark:text-lightGray dark:bg-darkBlue dark:shadow-none custom-shadow-2 rounded-md">
           <button
             className="block w-full pl-5 py-[10px] text-start font-bold hover:text-customPurple"
             onClick={() => handleChosen(1)}
