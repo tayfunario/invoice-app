@@ -6,6 +6,7 @@ import Toggle from "./Toggle";
 import { ItemArrayProps } from "./Edit";
 import { MdDelete } from "react-icons/md";
 import { useSessionStorage } from "./useSessionStorage";
+import { useWindowSize } from "./useWindowSize";
 import { InvoiceProps } from "../pages";
 
 interface CreateInvoiceProps {
@@ -21,9 +22,19 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
   const [toggleStyle, setToggleStyle] = useState<
     "border-red" | "border-lightGray dark:border-darkBlue"
   >("border-lightGray dark:border-darkBlue");
+  const { addNewItemToSS } = useSessionStorage();
+  const { windowSize } = useWindowSize();
   const allFieldAlert = useRef<HTMLParagraphElement>();
   const itemAlert = useRef<HTMLParagraphElement>();
-  const { addNewItemToSS } = useSessionStorage();
+
+  useEffect(() => {
+    document.addEventListener("click", (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target.id === "background-cover") {
+        handleCreate(false);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     refreshBorder();
@@ -253,7 +264,342 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
     }
   };
 
-  return (
+  return windowSize.width > 768 ? (
+    <div
+      id="background-cover"
+      className="fixed bg-black bg-opacity-40 w-full h-screen z-20"
+    >
+      <div className="w-[40rem] bg-white dark:bg-black2 h-screen overflow-scroll">
+        <button
+          className="flex justify-start items-baseline gap-x-4 dark:text-white font-bold mt-10 px-6"
+          onClick={() => handleCreate(false)}
+        >
+          <Image
+            src="/icon-arrow-left.svg"
+            alt="left arrow"
+            width={7}
+            height={7}
+          />
+          Go back
+        </button>
+        <form
+          id="form1"
+          className="mt-5 mx-5 pb-32"
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <h2 className="font-bold text-2xl dark:text-white tracking-tight">
+            New Invoice
+          </h2>
+
+          <fieldset className="mt-5">
+            <legend className="font-bold text-customPurple">Bill From</legend>
+
+            <div className="flex flex-wrap items-center justify-between mt-5">
+              <label className="input-label" htmlFor="street">
+                Street Address
+              </label>
+              <span className="hidden text-red text-xs">can't be empty</span>
+              <input
+                id="street"
+                type="text"
+                maxLength={30}
+                className="custom-input border-lightGray dark:border-darkBlue"
+                onChange={(e) => hideSpan(e.target)}
+                onFocus={(e) => handleFocus(e.target)}
+                onBlur={() => refreshBorder()}
+              />
+            </div>
+
+            <div className="flex gap-x-4">
+              <div className="flex basis-1/3 flex-wrap items-center justify-between mt-5">
+                <label className="input-label" htmlFor="city">
+                  City
+                </label>
+                <span className="hidden text-red text-xs">can't be empty</span>
+                <input
+                  id="city"
+                  type="text"
+                  maxLength={20}
+                  className="custom-input border-lightGray dark:border-darkBlue"
+                  onChange={(e) => hideSpan(e.target)}
+                  onFocus={(e) => handleFocus(e.target)}
+                  onBlur={() => refreshBorder()}
+                />
+              </div>
+              <div className="flex basis-1/3 flex-wrap items-center justify-between mt-5">
+                <label className="input-label" htmlFor="post-code">
+                  Post Code
+                </label>
+                <span className="hidden text-red text-xs">can't be empty</span>
+                <input
+                  id="post-code"
+                  type="text"
+                  maxLength={10}
+                  className="custom-input border-lightGray dark:border-darkBlue"
+                  onChange={(e) => hideSpan(e.target)}
+                  onFocus={(e) => handleFocus(e.target)}
+                  onBlur={() => refreshBorder()}
+                />
+              </div>
+              <div className="flex basis-1/3 flex-wrap items-center justify-between mt-5">
+                <label className="input-label" htmlFor="country">
+                  Country
+                </label>
+                <span className="hidden text-red text-xs">can't be empty</span>
+                <input
+                  id="country"
+                  type="text"
+                  maxLength={20}
+                  className="custom-input border-lightGray dark:border-darkBlue"
+                  onChange={(e) => hideSpan(e.target)}
+                  onFocus={(e) => handleFocus(e.target)}
+                  onBlur={() => refreshBorder()}
+                />
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset className="mt-10">
+            <legend className="font-bold text-customPurple">Bill To</legend>
+
+            <div className="flex flex-wrap items-center justify-between mt-5">
+              <label className="input-label" htmlFor="client-name">
+                Client's Name
+              </label>
+              <span className="hidden text-red text-xs">can't be empty</span>
+              <input
+                id="client-name"
+                type="text"
+                maxLength={20}
+                className="custom-input border-lightGray dark:border-darkBlue"
+                onChange={(e) => hideSpan(e.target)}
+                onFocus={(e) => handleFocus(e.target)}
+                onBlur={() => refreshBorder()}
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between mt-5">
+              <label className="input-label" htmlFor="client-email">
+                Client's Email
+              </label>
+              <span className="hidden text-red text-xs">
+                can't be empty or invalid
+              </span>
+              <input
+                id="client-email"
+                type="email"
+                maxLength={35}
+                className="custom-input border-lightGray dark:border-darkBlue"
+                onChange={(e) => hideSpan(e.target)}
+                onFocus={(e) => handleFocus(e.target)}
+                onBlur={() => refreshBorder()}
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between mt-5">
+              <label className="input-label" htmlFor="tostreet">
+                Street Address
+              </label>
+              <span className="hidden text-red text-xs">can't be empty</span>
+              <input
+                id="tostreet"
+                type="text"
+                maxLength={25}
+                className="custom-input border-lightGray dark:border-darkBlue"
+                onChange={(e) => hideSpan(e.target)}
+                onFocus={(e) => handleFocus(e.target)}
+                onBlur={() => refreshBorder()}
+              />
+            </div>
+
+            <div className="flex gap-x-4">
+              <div className="flex basis-1/3 flex-wrap items-center justify-between mt-5">
+                <label className="input-label" htmlFor="tocity">
+                  City
+                </label>
+                <span className="hidden text-red text-xs">can't be empty</span>
+                <input
+                  id="tocity"
+                  type="text"
+                  maxLength={20}
+                  className="custom-input border-lightGray dark:border-darkBlue"
+                  onChange={(e) => hideSpan(e.target)}
+                  onFocus={(e) => handleFocus(e.target)}
+                  onBlur={() => refreshBorder()}
+                />
+              </div>
+              <div className="flex basis-1/3 flex-wrap items-center justify-between mt-5">
+                <label className="input-label" htmlFor="topost-code">
+                  Post Code
+                </label>
+                <span className="hidden text-red text-xs">can't be empty</span>
+                <input
+                  id="topost-code"
+                  type="text"
+                  maxLength={10}
+                  className="custom-input border-lightGray dark:border-darkBlue"
+                  onChange={(e) => hideSpan(e.target)}
+                  onFocus={(e) => handleFocus(e.target)}
+                  onBlur={() => refreshBorder()}
+                />
+              </div>
+              <div className="flex basis-1/3 flex-wrap items-center justify-between mt-5">
+                <label className="input-label" htmlFor="tocountry">
+                  Country
+                </label>
+                <span className="hidden text-red text-xs">can't be empty</span>
+                <input
+                  id="tocountry"
+                  type="text"
+                  maxLength={20}
+                  className="custom-input border-lightGray dark:border-darkBlue"
+                  onChange={(e) => hideSpan(e.target)}
+                  onFocus={(e) => handleFocus(e.target)}
+                  onBlur={() => refreshBorder()}
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-x-4 items-end">
+              <div className="flex grow flex-wrap items-center justify-between mt-10">
+                <label className="input-label" htmlFor="date">
+                  Invoice Date
+                </label>
+                <span className="hidden text-red text-xs">can't be empty</span>
+                <input
+                  type="date"
+                  id="date"
+                  className="custom-input border-lightGray dark:border-darkBlue"
+                  onChange={(e) => hideSpan(e.target)}
+                  onFocus={(e) => handleFocus(e.target)}
+                  onBlur={() => refreshBorder()}
+                />
+              </div>
+              <Toggle
+                paymentTerms={paymentTerms}
+                handlePaymentTerms={handlePaymentTerms}
+                style={toggleStyle}
+                removeStyle={removeStyle}
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between mt-5">
+              <label className="input-label" htmlFor="description">
+                Project Description
+              </label>
+              <span className="hidden text-red text-xs">can't be empty</span>
+              <input
+                id="description"
+                type="text"
+                className="custom-input border-lightGray dark:border-darkBlue"
+                onChange={(e) => hideSpan(e.target)}
+                onFocus={(e) => handleFocus(e.target)}
+                onBlur={() => refreshBorder()}
+              />
+            </div>
+          </fieldset>
+
+          <fieldset className="mt-10">
+            <legend className="font-bold text-customPurple">Item List</legend>
+
+            <div className="grid grid-cols-9 gap-x-2 mt-5">
+              <label className="col-span-3 input-label">Item Name</label>
+              <label className="input-label">Qty.</label>
+              <label className="col-span-2 input-label">Price</label>
+              <span className="input-label">Total</span>
+            </div>
+
+            {items.map((item, index) => (
+              <div key={item.name}>
+                <div className="grid grid-cols-9 gap-x-2 mt-3">
+                  <div className="col-span-3">
+                    <span className="hidden text-red text-xs">
+                      can't be empty
+                    </span>
+                    <input
+                      id={`item-${index + 1}`}
+                      type="text"
+                      defaultValue={item.name}
+                      className="custom-input border-lightGray dark:border-darkBlue"
+                      onChange={(e) => hideSpan(e.target)}
+                      onFocus={(e) => handleFocus(e.target)}
+                      onBlur={() => refreshBorder()}
+                    />
+                  </div>
+
+                  <div>
+                    <input
+                      type="number"
+                      id={`quantity-${index + 1}`}
+                      defaultValue={item.quantity}
+                      className="custom-input border-lightGray dark:border-darkBlue"
+                      onChange={(e) => handleQtyChange(e.target.value, index)}
+                      onFocus={(e) => handleFocus(e.target)}
+                      onBlur={() => refreshBorder()}
+                    />
+                  </div>
+
+                  <div className="col-span-2">
+                    <input
+                      type="number"
+                      id={`price-${index + 1}`}
+                      defaultValue={item.price}
+                      className="custom-input border-lightGray dark:border-darkBlue"
+                      onChange={(e) => handlePriceChange(e.target.value, index)}
+                      onFocus={(e) => handleFocus(e.target)}
+                      onBlur={() => refreshBorder()}
+                    />
+                  </div>
+
+                  <div className="col-span-2">
+                    <div className="flex items-center h-10 text-darkerGray dark:text-lightGray font-bold text-[15px]">
+                      {item.total.toFixed(2)}
+                    </div>
+                  </div>
+
+                  <button
+                    className="remove-item-btn grid place-items-center self-center h-10"
+                    onClick={() => removeItem(index)}
+                  >
+                    <MdDelete className="remove-icon w-6 h-6 text-darkerGray" />
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            <button className="button-6" onClick={() => addNewItem()}>
+              <img src="/icon-plus.svg" />
+              Add New Item
+            </button>
+
+            <p
+              ref={allFieldAlert}
+              className="invisible mt-7 text-red text-sm font-semibold"
+            >
+              -All fields must be added
+            </p>
+            {!items.length && (
+              <p ref={itemAlert} className="text-red text-sm font-semibold">
+                -An item must be added
+              </p>
+            )}
+          </fieldset>
+        </form>
+
+        <div className="fixed bottom-0 flex justify-end items-center gap-x-2 w-[40rem] h-20 px-5 custom-shadow dark:shadow-none bg-white dark:bg-dark">
+          <button className="button-3" onClick={() => handleCreate(false)}>
+            Cancel
+          </button>
+          <button
+            className="button-2"
+            onClick={() => checkIfEveryInputIsValid()}
+          >
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  ) : (
     <div className="w-full dark:bg-black2">
       <Header />
 
