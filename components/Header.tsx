@@ -28,6 +28,7 @@ function Header() {
               alt="moon svg"
               width="20"
               height="20"
+              className="cursor-pointer"
               onClick={() => {
                 document.documentElement.classList.toggle("dark");
                 setDarkMode(!darkMode);
@@ -39,6 +40,7 @@ function Header() {
               alt="moon svg"
               width="20"
               height="20"
+              className="cursor-pointer"
               onClick={() => {
                 document.documentElement.classList.toggle("dark");
                 setDarkMode(!darkMode);
@@ -79,6 +81,7 @@ function Header() {
               alt="moon svg"
               width="20"
               height="20"
+              className="cursor-pointer"
               onClick={() => {
                 document.documentElement.classList.toggle("dark");
                 setDarkMode(!darkMode);
@@ -90,6 +93,7 @@ function Header() {
               alt="moon svg"
               width="20"
               height="20"
+              className="cursor-pointer"
               onClick={() => {
                 document.documentElement.classList.toggle("dark");
                 setDarkMode(!darkMode);
