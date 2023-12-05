@@ -266,10 +266,14 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
 
   return windowSize.width > 768 ? (
     <div
+      data-cy="creating-modal-wrapper"
       id="background-cover"
       className="fixed bg-black bg-opacity-40 w-full h-screen z-50"
     >
-      <div className="w-[40rem] bg-white dark:bg-black2 h-screen overflow-scroll">
+      <div
+        data-cy="creating-modal"
+        className="w-[40rem] bg-white dark:bg-black2 h-screen overflow-scroll"
+      >
         <button
           className="flex justify-start items-baseline gap-x-4 dark:text-white font-bold mt-10 px-6"
           onClick={() => handleCreate(false)}
@@ -386,6 +390,7 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
                 can't be empty or invalid
               </span>
               <input
+                data-cy="email-input"
                 id="client-email"
                 type="email"
                 maxLength={35}
@@ -592,7 +597,10 @@ function CreateInvoice({ handleCreate }: CreateInvoiceProps) {
           </button>
 
           <div className="flex gap-x-2">
-            <button className="button-4" onClick={() => handleDraftOrSave("draft")}>
+            <button
+              className="button-4"
+              onClick={() => handleDraftOrSave("draft")}
+            >
               Save as Draft
             </button>
             <button

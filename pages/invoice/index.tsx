@@ -78,10 +78,11 @@ export default function Index() {
               Status
             </span>
             <div
+              data-cy="status-div"
               ref={statusRef}
               className={`flex justify-center items-center w-24 h-10 gap-x-1 font-semibold capitalize ${
                 colors[windowInvoice?.status]
-              } rounded-md dark:bg-transparent`}
+              } rounded-md dark:bg-transparent capitalize`}
             >
               <span className="text-xl">•</span> {windowInvoice?.status}
             </div>
@@ -91,7 +92,11 @@ export default function Index() {
             <button className="button-3" onClick={() => setEdit(!edit)}>
               Edit
             </button>
-            <button className="button-5" onClick={() => handleDeletion(true)}>
+            <button
+              data-cy="delete-btn"
+              className="button-5"
+              onClick={() => handleDeletion(true)}
+            >
               Delete
             </button>
             <button

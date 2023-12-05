@@ -28,6 +28,7 @@ function Invoice({ invoice, setItem }: InvoiceObjProps) {
 
   return windowSize.width > 640 ? (
     <Link
+      data-cy="invoice"
       href={"/invoice"}
       onClick={() => setItem(invoice)}
       className="relative grid grid-cols-5 items-center mx-auto my-4 h-20 py-6 px-5 border border-transparent hover:border-customPurple bg-white dark:bg-dark rounded-md"
@@ -61,7 +62,11 @@ function Invoice({ invoice, setItem }: InvoiceObjProps) {
         <span className="text-xl">•</span> {invoice.status}
       </div>
 
-      <img src="/icon-arrow-right.svg" className="absolute right-5" alt="arrow" />
+      <img
+        src="/icon-arrow-right.svg"
+        className="absolute right-5"
+        alt="arrow"
+      />
     </Link>
   ) : (
     <Link
@@ -92,6 +97,7 @@ function Invoice({ invoice, setItem }: InvoiceObjProps) {
           </span>
         </div>
         <div
+          data-cy="invoice-status"
           className={`flex justify-center items-center w-24 h-10 gap-x-1 font-semibold capitalize ${
             colors[invoice.status]
           } rounded-md dark:bg-transparent`}

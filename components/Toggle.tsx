@@ -49,6 +49,7 @@ function Toggle({
         )}
       </div>
       <button
+        data-cy="payment-terms-btn"
         className={`flex justify-between items-center w-full h-10 dark:text-white dark:bg-dark font-bold px-3 rounded-md border ${style} ${
           show && "border-customPurple"
         } hover:border-customPurple`}

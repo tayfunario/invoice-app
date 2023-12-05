@@ -266,10 +266,14 @@ function Edit({ handleEdit, windowInvoice }: EditProps) {
 
   return windowSize.width > 768 ? (
     <div
+      data-cy="create-modal-background"
       id="background-cover"
       className="fixed bg-black bg-opacity-40 w-full h-screen z-50"
     >
-      <div className="w-[40rem] bg-white dark:bg-black2 h-screen overflow-scroll">
+      <div
+        data-cy="create-modal"
+        className="w-[40rem] bg-white dark:bg-black2 h-screen overflow-scroll"
+      >
         <button
           className="flex justify-start items-baseline gap-x-4 dark:text-white font-bold mt-10 px-6"
           onClick={() => handleEdit()}

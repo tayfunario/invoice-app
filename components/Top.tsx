@@ -63,6 +63,7 @@ function Top({ invNum, handleCreate, filter, handleFilter }: TopProps) {
       <div className="relative flex items-center gap-x-4">
         <div className="flex items-center px-2 font-bold rounded-2xl">
           <button
+            data-cy="filter-btn"
             id="toggle-control"
             className="flex items-center gap-x-2 z-20"
             onClick={() => setOpen(!open)}
@@ -71,6 +72,7 @@ function Top({ invNum, handleCreate, filter, handleFilter }: TopProps) {
             <img src="icon-arrow-down.svg" />
           </button>
           <motion.ul
+            data-cy="filter-ul"
             className="absolute sm:top-12 top-10 origin-top sm:right-36 right-20 w-24 p-1 text-md font-normal bg-white shadow-md z-50"
             variants={ulVariants}
             animate={open ? "open" : "closed"}
@@ -122,7 +124,11 @@ function Top({ invNum, handleCreate, filter, handleFilter }: TopProps) {
           </motion.ul>
         </div>
 
-        <button className="button-1" onClick={() => handleCreate(true)}>
+        <button
+          data-cy="new-invoice"
+          className="button-1"
+          onClick={() => handleCreate(true)}
+        >
           <img
             src="icon-plus.svg"
             className="p-[9px] m-0 bg-white rounded-full"
