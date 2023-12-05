@@ -50,7 +50,7 @@ export default function Index() {
     <>
       {edit && <Edit handleEdit={handleEdit} windowInvoice={windowInvoice} />}
       <Header />
-      <div className="py-10 xl:px-64 lg:px-36 md:px-12 sm:px-8 px-6 bg-lightBG dark:bg-black2">
+      <div className="min-h-screen py-10 xl:px-64 lg:px-36 md:px-12 sm:px-8 px-6 bg-lightBG dark:bg-black2">
         {deletion && (
           <DeletionConfirmation
             handleDeletion={handleDeletion}
